@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "0.1.0")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.0")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
