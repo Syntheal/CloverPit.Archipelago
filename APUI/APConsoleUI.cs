@@ -10,8 +10,8 @@ public class APConsoleUI : MonoBehaviour
     private const float Padding = 10f;
 
     private float currentHeight = ClosedHeight;
-    private Vector2 scroll;
-    private bool wasOpenLastFrame;
+
+    private Vector2 scrollPosition = Vector2.zero;
 
     private const float TopOffset = -2f;
 
@@ -29,17 +29,7 @@ public class APConsoleUI : MonoBehaviour
             return;
 
         float targetHeight = IsAPUIOpen ? OpenHeight : ClosedHeight;
-
-        currentHeight = Mathf.Lerp(
-            currentHeight,
-            targetHeight,
-            Time.unscaledDeltaTime * SlideSpeed
-        );
-
-        if (IsAPUIOpen && !wasOpenLastFrame)
-            scroll.y = float.MaxValue;
-
-        wasOpenLastFrame = IsAPUIOpen;
+        currentHeight = Mathf.Lerp(currentHeight, targetHeight, Time.unscaledDeltaTime * SlideSpeed);
     }
 
     private void OnGUI()
@@ -82,19 +72,26 @@ public class APConsoleUI : MonoBehaviour
 
     private void DrawConsoleContents()
     {
-        GUILayout.BeginArea(new Rect(
+        Rect headerRect = new Rect(
             PanelRect.x + Padding,
             PanelRect.y + Padding,
             PanelRect.width - Padding * 2,
-            Mathf.Max(0f, PanelRect.height - Padding * 2)
-        ));
-
+            30 
+        );
+        GUILayout.BeginArea(headerRect);
         GUILayout.Label("ARCHIPELAGO CONSOLE", TitleStyle());
-        GUILayout.Space(6);
+        GUILayout.EndArea();
 
-        bool atBottom = IsScrolledToBottom();
+        Rect scrollRect = new Rect(
+            PanelRect.x + Padding,
+            PanelRect.y + Padding + 30,
+            PanelRect.width - Padding * 2,
+            PanelRect.height - Padding * 2 - 30 
+        );
 
-        scroll = GUILayout.BeginScrollView(scroll);
+        GUILayout.BeginArea(scrollRect);
+
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Width(scrollRect.width), GUILayout.Height(scrollRect.height));
 
         foreach (var line in APConsoleLog.Lines)
         {
@@ -103,15 +100,7 @@ public class APConsoleUI : MonoBehaviour
         }
 
         GUILayout.EndScrollView();
-        GUILayout.EndArea();
-
-        if (atBottom)
-            scroll.y = float.MaxValue;
-    }
-
-    private bool IsScrolledToBottom()
-    {
-        return scroll.y >= Mathf.Max(0f, scroll.y - 20f);
+        GUILayout.EndArea(); 
     }
 
     private GUIStyle GetStyleForLine(APConsoleLineType type)

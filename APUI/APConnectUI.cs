@@ -13,12 +13,12 @@ public class APConnectUI : MonoBehaviour
 
     private bool isConnecting = false;
 
-    private readonly Rect panelRect = new Rect(10, 80, 320, 370);
+    private readonly Rect panelRect = new Rect(10, 180, 320, 370);
     private const float Padding = 10f;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F8))
+        if (Input.GetKeyDown(KeyCode.F8) && !APDeathLinkUI.Instance.isShowing && !APUITrapPopup.Instance.isShowing)
         {
             ToggleUI();
         }

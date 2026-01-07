@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public static class APState
 {
+    public static bool ShowTrapPopup { get; set; }
     public enum APDeathCause
     {
         None,
@@ -32,7 +33,7 @@ public static class APState
     //Idk why I decided to change the case for these but I cannot be bothered to change it
     public static string goalType = "key";
     public static int deadlineGoal = 12;
-    public static int deadlineAmount = 0;
+    public static int deadlineAmount = 5;
     public static int deadlinesCompleted = 0;
     public static bool goalCompleted = false;
 

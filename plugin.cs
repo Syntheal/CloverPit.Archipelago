@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.0")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.2")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -23,11 +23,17 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(console);
         console.AddComponent<APConsoleUI>();
 
+        var trap = new GameObject("APTrapUI");
+        DontDestroyOnLoad(trap);
+        trap.AddComponent<APUITrapPopup>();
+
         Log = Logger;
         Log.LogInfo("CloverPit Archipelago loaded");
 
         harmony = new Harmony("cloverpit.archipelago");
         harmony.PatchAll();
+
+        APLocations.PopulateLocationNames();
 
         APClient.ItemReceived += item =>
         {
@@ -66,11 +72,11 @@ public class Plugin : BaseUnityPlugin
                     APDrawerProgression.GrantNext(item.PlayerName);
                     APState.SuppressDrawerUnlockQuestion = false;
                 }
-                else if (item.ItemName.StartsWith("Coin Trap") || item.ItemId.ToString().StartsWith("1236"))
-                    APTrapExecutor.TriggerCoinTrap();
-                else if (item.ItemName.StartsWith("Clover Trap") || item.ItemId.ToString().StartsWith("1235"))
-                    APTrapExecutor.TriggerCloverTrap();
-                else if (item.ItemName.StartsWith("10x Clover") || item.ItemId.ToString().StartsWith("1236"))
+                else if (item.ItemName.StartsWith("Coin Trap"))
+                    APTrapExecutor.TriggerCoinTrap(item.PlayerName);
+                else if (item.ItemName.StartsWith("Clover Trap"))
+                    APTrapExecutor.TriggerCloverTrap(item.PlayerName);
+                else if (item.ItemName.StartsWith("10x Clover"))
                 {
                     GameplayData.CloverTicketsAdd(10, addToStats: true);
                     Log.LogInfo("[AP] Granted 10 Clover Tickets for item: " + item.ItemName);

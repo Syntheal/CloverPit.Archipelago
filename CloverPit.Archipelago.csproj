@@ -99,6 +99,7 @@
     <Compile Include="APState.cs" />
     <Compile Include="APTrapExecutor.cs" />
     <Compile Include="APUI\APDeathLinkUI.cs" />
+    <Compile Include="APUI\APUITrapPopup.cs" />
     <Compile Include="Deathlink\APRestartPatch.cs" />
     <Compile Include="Deathlink\APDeathLinkKiller.cs" />
     <Compile Include="Deathlink\APDeathLinkDieTryPatch.cs" />

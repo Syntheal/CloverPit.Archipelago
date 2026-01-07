@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using static APState;
 
-public class APDeathLinkUI : MonoBehaviour
+public class APUITrapPopup : MonoBehaviour
 {
-    public static APDeathLinkUI Instance { get; private set; }
+    public static APUITrapPopup Instance { get; private set; }
 
-    private const float PanelMaxWidth = 440f;
+    private const float PanelMaxWidth = 720f;
     private const float Padding = 20f;
-    private const float ButtonHeight = 30f; 
+    private const float ButtonHeight = 30f;
 
     public bool isShowing;
-    private string deathLinkSource;
-    private string deathLinkCause;
+    private string message;
+    private string senderName;
 
     private float panelWidth;
     private float panelHeight;
@@ -30,7 +30,7 @@ public class APDeathLinkUI : MonoBehaviour
 
     private void Update()
     {
-        if (APDeathState.ShowDeathLinkUI && !isShowing)
+        if (APState.ShowTrapPopup && !isShowing)
         {
             Open();
         }
@@ -43,7 +43,7 @@ public class APDeathLinkUI : MonoBehaviour
 
         panelWidth = Mathf.Min(PanelMaxWidth, Screen.width * 0.8f);
 
-        panelHeight = Mathf.Max(240f, 100f + (deathLinkSource.Length + deathLinkCause.Length) / 20f * 20f + ButtonHeight + Padding * 2);
+        panelHeight = Mathf.Max(240f, 80f + (message.Split('\n').Length * 20f) + ButtonHeight + Padding * 2);
 
         Rect panelRect = new Rect(
             (Screen.width - panelWidth) * 0.5f,
@@ -60,15 +60,15 @@ public class APDeathLinkUI : MonoBehaviour
     {
         GUILayout.BeginArea(new Rect(panelRect.x + Padding, panelRect.y + Padding, panelRect.width - Padding * 2, panelRect.height - Padding * 2));
 
-        GUILayout.Label("DEATH LINK", TitleStyle());
+        GUILayout.Label("TRAP ACTIVATED", TitleStyle());
         GUILayout.Space(12);
 
-        GUILayout.Label($"Killed by: {deathLinkSource}", ContentStyle());
-        GUILayout.Label(deathLinkCause, ContentStyle());
+        GUILayout.Label($"Trap sent by: {senderName}", ContentStyle());
+        GUILayout.Label($"Lost: {message}", ContentStyle());
 
         GUILayout.Space(20);
 
-        GUILayout.Label("The network has claimed you.", ContentStyle());
+        GUILayout.Label("Be careful! More traps may be on the way.", ContentStyle());
 
         GUILayout.Space(10);
         if (GUILayout.Button("Close", GUILayout.Height(ButtonHeight)))
@@ -106,9 +106,9 @@ public class APDeathLinkUI : MonoBehaviour
     {
         isShowing = false;
 
-        APDeathState.ShowDeathLinkUI = false;
-        APDeathState.DeathLinkSource = "";
-        APDeathState.DeathLinkCause = "";
+        APState.ShowTrapPopup = false;
+        senderName = "";
+        message = "";
 
         DisableCursor();
     }
@@ -129,11 +129,11 @@ public class APDeathLinkUI : MonoBehaviour
         wordWrap = true
     };
 
-    public void ShowDeathLinkInfo(string source, string cause)
+    public void ShowTrapInfo(string trapMessage, string sender)
     {
-        deathLinkSource = source;
-        deathLinkCause = cause;
-        APDeathState.ShowDeathLinkUI = true;
+        message = trapMessage;
+        senderName = sender;
+        APState.ShowTrapPopup = true;
     }
 
     public static void EnableCursor()

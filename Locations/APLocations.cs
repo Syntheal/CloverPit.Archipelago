@@ -397,6 +397,21 @@ public static class APLocations
         { "Trigger 999", GetJackpotLocation(SymbolScript.Kind.nine) }
     };
 
+    public static void PopulateLocationNames()
+    {
+        foreach (var charm in APBuyItems.CharmToItemId)
+        {
+            string charmName = charm.Key;
+            int charmItemId = charm.Value;
+
+            string locationName = $"Buy {charmName.Substring(7)}";
+
+            long locationId = APBuyItems.GetBuyLocationId(charmItemId);
+
+            LocationNamesToIds[locationName] = locationId;
+        }
+    }
+
     public static string GetLocationName(long locationId)
     {
         foreach (var entry in LocationNamesToIds)

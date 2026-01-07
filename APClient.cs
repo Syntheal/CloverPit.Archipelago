@@ -92,49 +92,97 @@ public static class APClient
     {
         try
         {
-            APState.CloverTrapPercent =
-                slotData.TryGetValue("clover_trap_percent", out var clover) && clover is double cloverValue
-                ? (float)(cloverValue / 100.0)
-                : 0.20f;
+            if (slotData.TryGetValue("clover_trap_percent", out var clover))
+            {
+                if (clover is Int64 cloverValue)
+                {
+                    APState.CloverTrapPercent = (float)(cloverValue / 100.0);
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] Clover Trap Percent value is not an Int64.");
+                }
+            }
+            else
+            {
+                APState.CloverTrapPercent = 0.20f; 
+                Plugin.Log.LogWarning("[AP] Clover Trap Percent not found, using default.");
+            }
 
-            APState.CoinTrapPercent =
-                slotData.TryGetValue("coin_trap_percent", out var coin) && coin is double coinValue
-                ? (float)(coinValue / 100.0)
-                : 0.20f;
+            if (slotData.TryGetValue("coin_trap_percent", out var coin))
+            {
+                if (coin is Int64 coinValue)
+                {
+                    APState.CoinTrapPercent = (float)(coinValue / 100.0);
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] Coin Trap Percent value is not an Int64.");
+                }
+            }
+            else
+            {
+                APState.CoinTrapPercent = 0.20f; 
+                Plugin.Log.LogWarning("[AP] Coin Trap Percent not found, using default.");
+            }
 
-            string goalType =
-                slotData.TryGetValue("goal_type", out var goalObj) ? goalObj.ToString() : "deadline";
-            APState.goalType = goalType;
+            if (slotData.TryGetValue("goal_type", out var goalObj))
+            {
+                if (goalObj is Int64 goalTypeLongValue)
+                {
+                    APState.goalType = goalTypeLongValue == 0 ? "key" : "deadline"; 
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] GoalType is neither an int nor Int64.");
+                    APState.goalType = "not found";
+                }
+            }
+            else
+            {
+                APState.goalType = "not found";
+            }
+
+            if (APState.goalType == "key")
+            {
+                if (slotData.TryGetValue("ending_type", out var endingObj))
+                {
+                    if (endingObj is Int64 endingTypeValue)
+                    {
+                        APState.RequiredKeyEnding = endingTypeValue == 1 ? 1 : 0;
+                    }
+                    else
+                    {
+                        APState.RequiredKeyEnding = 0; 
+                        Plugin.Log.LogWarning("[AP] EndingType not found, using default.");
+                    }
+                }
+                else
+                {
+                    APState.RequiredKeyEnding = 0;
+                    Plugin.Log.LogWarning("[AP] EndingType not found, using default.");
+                }
+            }
 
             if (APState.goalType == "deadline")
             {
                 APState.deadlineGoal =
                     slotData.TryGetValue("deadline_goal", out var dg) && dg is int deadlineGoal
                     ? deadlineGoal
-                    : 12;
+                    : 16;
 
                 APState.deadlineAmount =
                     slotData.TryGetValue("deadline_amount", out var da) && da is int deadlineAmount
                     ? deadlineAmount
-                    : 5;
+                    : 12;
             }
 
-            if (APState.goalType == "key")
-            {
-                APState.RequiredKeyEnding =
-                    slotData.TryGetValue("ending_type", out var ending) && ending is string endingType
-                    ? (endingType == "skeleton_key_bad_ending" ? 0 : 1)
-                    : 0;
-            }
-
-            APState.Deathlink =
-                slotData.TryGetValue("deathlink", out var deathlink) && Convert.ToString(deathlink) == "on";
-
-            APState.DeathLinkRestart =
-                slotData.TryGetValue("does_restart_deathlink", out var deathLinkRestart) && Convert.ToString(deathLinkRestart) == "on";
+            APState.Deathlink = slotData.TryGetValue("deathlink", out var deathlink) && Convert.ToString(deathlink) == "1";
+            APState.DeathLinkRestart = slotData.TryGetValue("does_restart_deathlink", out var deathLinkRestart) && Convert.ToString(deathLinkRestart) == "1";
 
             Plugin.Log.LogInfo(
-                $"[AP] SlotData loaded | Goal={goalType}, Deadline={APState.deadlineGoal}, " +
+                $"[AP] SlotData loaded | Goal={APState.goalType}, Ending={APState.RequiredKeyEnding}, " +
+                $"DeadlineGoal={APState.deadlineGoal}, DeadlineAmount={APState.deadlineAmount}, " +
                 $"Clover={APState.CloverTrapPercent:P0}, Coin={APState.CoinTrapPercent:P0}, " +
                 $"Deathlink={APState.Deathlink}, Does restarts count for deathlink={APState.DeathLinkRestart}"
             );
@@ -179,7 +227,6 @@ public static class APClient
         }
     }
 
-
     private static void GrantItem(APItem item)
     {
         APState.IsGrantingItem = true;
@@ -198,13 +245,6 @@ public static class APClient
             APState.IsGrantingItem = false;
         }
     }
-
-
-    public static void ReceiveItem(APItem item)
-    {
-        ItemReceived?.Invoke(item);
-    }
-
 
     public static void SendLocationCheck(long locationId)
     {
@@ -236,16 +276,6 @@ public static class APClient
         Session.Socket.DisconnectAsync();
 
         APState.Reset();
-    }
-
-    public static void DebugGrant(string itemName)
-    {
-        ReceiveItem(new APItem
-        {
-            ItemId = -1,
-            Player = 0,
-            ItemName = itemName
-        });
     }
 
     public static void SendGoalCompletion()
