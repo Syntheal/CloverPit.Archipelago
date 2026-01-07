@@ -18,7 +18,7 @@ public class APConnectUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F8) && !APDeathLinkUI.Instance.isShowing && !APUITrapPopup.Instance.isShowing)
+        if (Input.GetKeyDown(KeyCode.F8) && !APUITrapPopup.Instance.isShowing)
         {
             ToggleUI();
         }

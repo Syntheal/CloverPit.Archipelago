@@ -7,7 +7,7 @@ public static class BlockMenuInputWhileAPUIOpenPatch
     [HarmonyPatch("Update")]
     static bool UpdatePrefix()
     {
-        if (APState.IsAPUIOpen || APUITrapPopup.Instance.isShowing || APDeathLinkUI.Instance.isShowing)
+        if (APState.IsAPUIOpen || APUITrapPopup.Instance.isShowing)
             return false;
 
         return true;

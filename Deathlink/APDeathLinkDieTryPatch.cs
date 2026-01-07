@@ -36,7 +36,6 @@ internal static class APDeathLinkDieTryPatch
                 APClient.SendDeathLink("Died in CloverPit");
                 break;
         }
-        APDeathState.DeathLinkKillPending = false;
         APDeathState.PendingDeathCause = APDeathCause.None;
     }
 }

@@ -58,16 +58,17 @@ public static class APTrapExecutor
 
         BigInteger removed = CalculatePercentLoss(current, APState.CoinTrapPercent);
 
-        Plugin.Log.LogInfo($"removed--------------------- {removed}");
-
         if (removed > 0)
         {
             GameplayData.CoinsSet(current - removed);
+
+            string formattedRemoved = removed.ToString("N0");
+
             Plugin.Log.LogWarning(
-                $"[AP][TRAP] Coin trap! Lost {removed} coins ({APState.CoinTrapPercent:P0})"
+                $"[AP][TRAP] Coin trap! Lost {formattedRemoved} coins ({APState.CoinTrapPercent:P0})"
             );
 
-            APUITrapPopup.Instance.ShowTrapInfo($"{removed} Coins", senderName);
+            APUITrapPopup.Instance.ShowTrapInfo($"{formattedRemoved} Coins", senderName);
         }
         else
         {

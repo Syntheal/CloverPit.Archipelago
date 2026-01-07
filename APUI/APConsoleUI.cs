@@ -13,6 +13,9 @@ public class APConsoleUI : MonoBehaviour
 
     private Vector2 scrollPosition = Vector2.zero;
 
+    // Flag to determine if we need to scroll to the bottom
+    private bool shouldScrollToBottom = false;
+
     private const float TopOffset = -2f;
 
     private Rect PanelRect =>
@@ -30,6 +33,11 @@ public class APConsoleUI : MonoBehaviour
 
         float targetHeight = IsAPUIOpen ? OpenHeight : ClosedHeight;
         currentHeight = Mathf.Lerp(currentHeight, targetHeight, Time.unscaledDeltaTime * SlideSpeed);
+
+        if (APConsoleLog.Lines.Count > 0 && !shouldScrollToBottom)
+        {
+            shouldScrollToBottom = true;
+        }
     }
 
     private void OnGUI()
@@ -76,7 +84,7 @@ public class APConsoleUI : MonoBehaviour
             PanelRect.x + Padding,
             PanelRect.y + Padding,
             PanelRect.width - Padding * 2,
-            30 
+            30
         );
         GUILayout.BeginArea(headerRect);
         GUILayout.Label("ARCHIPELAGO CONSOLE", TitleStyle());
@@ -86,7 +94,7 @@ public class APConsoleUI : MonoBehaviour
             PanelRect.x + Padding,
             PanelRect.y + Padding + 30,
             PanelRect.width - Padding * 2,
-            PanelRect.height - Padding * 2 - 30 
+            PanelRect.height - Padding * 2 - 30
         );
 
         GUILayout.BeginArea(scrollRect);
@@ -99,8 +107,14 @@ public class APConsoleUI : MonoBehaviour
             GUILayout.Label(line.Text, style);
         }
 
+        if (shouldScrollToBottom && Mathf.Abs(scrollPosition.y - Mathf.Infinity) < 0.1f)
+        {
+            scrollPosition.y = float.MaxValue;
+            shouldScrollToBottom = false;
+        }
+
         GUILayout.EndScrollView();
-        GUILayout.EndArea(); 
+        GUILayout.EndArea();
     }
 
     private GUIStyle GetStyleForLine(APConsoleLineType type)

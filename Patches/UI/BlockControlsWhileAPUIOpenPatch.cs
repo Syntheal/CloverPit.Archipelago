@@ -27,7 +27,7 @@ public static class BlockControlsWhileAPUIOpenPatch
 
     static bool Prefix(MethodBase __originalMethod, ref object __result)
     {
-        if (!APState.IsAPUIOpen && !APUITrapPopup.Instance.isShowing && !APDeathLinkUI.Instance.isShowing)
+        if (!APState.IsAPUIOpen && !APUITrapPopup.Instance.isShowing)
             return true;
 
         if (__result is float)

@@ -15,10 +15,6 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(go);
         go.AddComponent<APConnectUI>();
 
-        var dlui = new GameObject("APDeathLinkUI");
-        DontDestroyOnLoad(dlui);
-        dlui.AddComponent<APDeathLinkUI>();
-
         var console = new GameObject("APConsoleUI");
         DontDestroyOnLoad(console);
         console.AddComponent<APConsoleUI>();

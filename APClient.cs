@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using UnityEngine;
+using static APState;
 
 public static class APClient
 {
@@ -307,6 +308,13 @@ public static class APClient
         );
     }
 
+    public static void ResetDeathLinkState()
+    {
+        APDeathState.PendingDeathCause = APDeathCause.None;
+        APDeathState.DeathLinkSource = "";
+        APDeathState.DeathLinkCause = "";
+    }
+
     private static void OnDeathLinkReceived(DeathLink deathLink)
     {
         if (!APState.Deathlink)
@@ -324,9 +332,7 @@ public static class APClient
 
         APState.APDeathState.ShowDeathLinkUI = true;
 
-        APDeathLinkKiller.KillFromDeathLink();
-        APState.APDeathState.PendingDeathCause = APState.APDeathCause.DeathLink;
-        APState.APDeathState.DeathLinkKillPending = true;
+        APDeathLinkKiller.KillFromDeathLink(deathLink);
     }
 
 }

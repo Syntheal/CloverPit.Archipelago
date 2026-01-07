@@ -174,6 +174,9 @@ public static class APBuyItems
     [HarmonyPatch("BuyTry")]
     public static void Prefix_BuyTry(int id, ref BuyResult __result)
     {
+        if (id == 4)
+            return;
+
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
@@ -186,15 +189,17 @@ public static class APBuyItems
             return;
         }
 
-        StoreCapsuleScript storeCapsule = GetStoreCapsuleById(id);
-        if (storeCapsule != null && storeCapsule.isRefreshButton)
+        PowerupScript powerupScript = storePowerups[id];
+
+        if (IsSkeletonPowerup(powerupScript.identifier))
         {
             return;
         }
 
-        PowerupScript powerupScript = storePowerups[id];
+        string charmName = APItemMapping.IdentifierToPowerup(powerupScript.identifier);
 
-        string charmName = "Charm: " + powerupScript.identifier.ToString();
+        if (charmName.StartsWith("Skeleton"))
+            return;
 
         if (CharmToItemId.TryGetValue(charmName, out var charmItemId))
         {
@@ -207,5 +212,13 @@ public static class APBuyItems
                 Plugin.Log.LogInfo($"Activated location: {APLocations.GetLocationName(locationId)}");
             }
         }
+    }
+    private static bool IsSkeletonPowerup(PowerupScript.Identifier identifier)
+    {
+        return identifier == PowerupScript.Identifier.Skeleton_Head ||
+               identifier == PowerupScript.Identifier.Skeleton_Arm1 ||
+               identifier == PowerupScript.Identifier.Skeleton_Arm2 ||
+               identifier == PowerupScript.Identifier.Skeleton_Leg1 ||
+               identifier == PowerupScript.Identifier.Skeleton_Leg2;
     }
 }

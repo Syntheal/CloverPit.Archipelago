@@ -11,11 +11,9 @@ public static class APState
         Restart,
         DeathLink
     }
-    public static bool DeathLinkKillPending = false;
     public static class APDeathState
     {
         public static APDeathCause PendingDeathCause = APDeathCause.None;
-        public static bool DeathLinkKillPending = false;
 
         public static bool ShowDeathLinkUI = false;
         public static string DeathLinkSource = "";

@@ -171,6 +171,16 @@ public static class APItemMapping
             { "Charm: count", PowerupScript.Identifier.count },
         };
 
+    private static readonly Dictionary<PowerupScript.Identifier, string> ReverseMap =
+        new Dictionary<PowerupScript.Identifier, string>();
+
+    static APItemMapping()
+    {
+        foreach (var kvp in Map)
+        {
+            ReverseMap[kvp.Value] = kvp.Key;
+        }
+    }
 
     public static PowerupScript.Identifier ToPowerup(string apItemName)
     {
@@ -182,6 +192,15 @@ public static class APItemMapping
         return id;
     }
 
+    public static string IdentifierToPowerup(PowerupScript.Identifier id)
+    {
+        if (!ReverseMap.TryGetValue(id, out var itemName))
+        {
+            throw new Exception($"[AP] Unknown identifier from AP: {id}");
+        }
+
+        return itemName;
+    }
     public static bool IsPowerupItem(string apItemName)
         => Map.ContainsKey(apItemName);
 }
