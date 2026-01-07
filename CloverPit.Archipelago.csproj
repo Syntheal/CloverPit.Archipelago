@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{94880D4D-2C98-4EBA-B70C-D60234BC8651}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CloverPit.Archipelago</RootNamespace>
+    <AssemblyName>CloverPit.Archipelago</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Archipelago.MultiClient.Net">
+      <HintPath>libs\Archipelago.MultiClient.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APClient.cs" />
+    <Compile Include="APDrawerStateApplier.cs" />
+    <Compile Include="APItemMapping.cs" />
+    <Compile Include="APKeyProgression.cs" />
+    <Compile Include="APPhoneAbilityMapping.cs" />
+    <Compile Include="APResyncManager.cs" />
+    <Compile Include="APState.cs" />
+    <Compile Include="APTrapExecutor.cs" />
+    <Compile Include="APUI\APDeathLinkUI.cs" />
+    <Compile Include="Deathlink\APRestartPatch.cs" />
+    <Compile Include="Deathlink\APDeathLinkKiller.cs" />
+    <Compile Include="Deathlink\APDeathLinkDieTryPatch.cs" />
+    <Compile Include="APConsoleLog.cs" />
+    <Compile Include="Patches\Locations\APBuyItems.cs" />
+    <Compile Include="Patches\Locations\APCallPatch.cs" />
+    <Compile Include="Patches\Locations\APRedButtonSolo.cs" />
+    <Compile Include="Patches\Locations\APEarnCoins.cs" />
+    <Compile Include="Patches\Locations\APCloverTickets.cs" />
+    <Compile Include="Patches\Locations\RedButtonCharms.cs" />
+    <Compile Include="plugin.cs" />
+    <Compile Include="PowerupUnlocker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Saves\APSaveData.cs" />
+    <Compile Include="Saves\APSaveManager.cs" />
+    <Compile Include="Progressive_Items\APSkeletonProgression.cs" />
+    <Compile Include="Progressive_Items\APDrawerProgression.cs" />
+    <Compile Include="Patches\APAfterLoadPatch.cs" />
+    <Compile Include="Patches\APGameDataInitPatch.cs" />
+    <Compile Include="Patches\PreventVanillaUnlocksPatch.cs" />
+    <Compile Include="Patches\UI\AlwaysDisableSeededPatch.cs" />
+    <Compile Include="Patches\UI\AutoOpenAPUIOnMenuPatch.cs" />
+    <Compile Include="Patches\UI\BlockControlsWhileAPUIOpenPatch.cs" />
+    <Compile Include="Patches\UI\BlockMenuInputWhileAPUIOpenPatch.cs" />
+    <Compile Include="Patches\UI\BlockNewRunWithoutAPPatch.cs" />
+    <Compile Include="Patches\UI\GreyOutNewRunButtonsPatch.cs" />
+    <Compile Include="Patches\UI\LockVirtualCursorWhileAPUIOpenPatch.cs" />
+    <Compile Include="Patches\UI\RemoveContinueButtonPatch.cs" />
+    <Compile Include="Patches\Shop_And_Powerups\APLockedPowerupsResultPatch.cs" />
+    <Compile Include="Patches\Shop_And_Powerups\APStoreCapsuleSafetyPatch.cs" />
+    <Compile Include="Patches\Phone\AbilitySlotMissingAPPatch.cs" />
+    <Compile Include="Patches\Phone\APAbilityInitializeAllPatch.cs" />
+    <Compile Include="Patches\Phone\PreventLockedAbilityCanBePickedInstancePatch.cs" />
+    <Compile Include="Patches\Phone\PreventLockedAbilityCanBePickedStaticPatch.cs" />
+    <Compile Include="Patches\Locations\APCharmPatch.cs" />
+    <Compile Include="Patches\Locations\APDeadlinePatch.cs" />
+    <Compile Include="Patches\Locations\APDoorOpenPatch.cs" />
+    <Compile Include="Patches\Locations\APKeysPatch.cs" />
+    <Compile Include="Patches\Locations\APToiletPatch.cs" />
+    <Compile Include="Patches\Locations\SlotMachinePatch.cs" />
+    <Compile Include="Patches\Keys\APRewardBoxInitializePatch.cs" />
+    <Compile Include="Patches\Keys\APRewardBoxOpenPatch.cs" />
+    <Compile Include="Patches\Drawer\APDrawerCountPatch.cs" />
+    <Compile Include="Patches\Drawer\APDrawerInitializePatch.cs" />
+    <Compile Include="Patches\Drawer\APDrawerKeyAnimationCoroutinePatch.cs" />
+    <Compile Include="Patches\Drawer\APDrawerOpenTryPatch.cs" />
+    <Compile Include="Patches\Drawer\ApplyAPDrawerStatePatch.cs" />
+    <Compile Include="Patches\Drawer\DrawerSkeletonFilterPatch.cs" />
+    <Compile Include="Patches\Cards\APCardTextOverridePatch.cs" />
+    <Compile Include="Patches\Cards\APCranePackPatch.cs" />
+    <Compile Include="Patches\Cards\APDisableCardPickingPatch.cs" />
+    <Compile Include="Patches\Cards\APDisableMemoryPackDealPatch.cs" />
+    <Compile Include="Patches\Cards\APHideCardProgressTextPatch.cs" />
+    <Compile Include="Patches\Cards\APNoDealsEverPatch.cs" />
+    <Compile Include="Locations\APLocationManager.cs" />
+    <Compile Include="Locations\APLocations.cs" />
+    <Compile Include="APUI\APConnectUI.cs" />
+    <Compile Include="APUI\APConsoleUI.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
