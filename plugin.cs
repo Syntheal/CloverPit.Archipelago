@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.2")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.3")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -48,8 +48,19 @@ public class Plugin : BaseUnityPlugin
                 if (APPhoneAbilityMapping.IsPhoneAbility(item.ItemName))
                 {
                     var abilityId = APPhoneAbilityMapping.ToAbility(item.ItemName);
-                    if (APState.UnlockedPhoneAbilities.Add(abilityId))
-                        Log.LogInfo($"[AP] Unlocked phone ability: {abilityId}");
+
+                    if (!APState.UnlockedPhoneAbilities.Contains(abilityId))
+                    {
+                        if (APState.UnlockedPhoneAbilities.Add(abilityId))
+                        {
+                            //APAbilityInitializeAllPatch.AddAbilityBack(abilityId);
+                            Log.LogInfo($"[AP] Unlocked phone ability: {abilityId}");
+                        }
+                    }
+                    else
+                    {
+                        Log.LogWarning($"[AP] Ability {abilityId} is already unlocked.");
+                    }
                 }
                 else if (APItemMapping.IsPowerupItem(item.ItemName))
                 {

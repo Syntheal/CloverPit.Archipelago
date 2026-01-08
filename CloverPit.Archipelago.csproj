@@ -109,6 +109,7 @@
     <Compile Include="Patches\Locations\APEarnCoins.cs" />
     <Compile Include="Patches\Locations\APCloverTickets.cs" />
     <Compile Include="Patches\Locations\RedButtonCharms.cs" />
+    <Compile Include="Patches\Phone\APAbilityDefinePhoneStuffPatch.cs" />
     <Compile Include="plugin.cs" />
     <Compile Include="PowerupUnlocker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,6 +13,7 @@ internal static class APDeathLinkDieTryPatch
             APDeathState.PendingDeathCause = APDeathCause.None;
             return;
         }
+        APAbilityDefinePhoneStuffPatch.totalPickedTimes.Clear();
         if (!Deathlink)
         {
             APDeathState.PendingDeathCause = APDeathCause.None;

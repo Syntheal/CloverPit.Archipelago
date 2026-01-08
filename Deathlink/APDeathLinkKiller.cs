@@ -14,6 +14,7 @@ public static class APDeathLinkKiller
             GameplayMaster.DeathStep.lookAtTrapdoor,
             callLastChanceCallback: false
         );
+        APAbilityDefinePhoneStuffPatch.totalPickedTimes.Clear();
 
         APConsoleLog.Log($"DeathLink received from {deathLink.Source}: {deathLink.Cause}", APConsoleLineType.DeathLink);
     }

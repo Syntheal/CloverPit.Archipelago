@@ -53,7 +53,6 @@ public static class APClient
             Plugin.Log.LogError("[AP] Login failed: " + failure.ToString());
             return;
         }
-
         var success = (LoginSuccessful)result;
 
         APState.IsConnected = true;

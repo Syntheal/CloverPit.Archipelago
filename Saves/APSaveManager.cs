@@ -1,7 +1,9 @@
 ﻿using Archipelago;
 using Panik;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 public static class APSaveManager
@@ -79,7 +81,7 @@ public static class APSaveManager
                     break;
 
                 case "[PHONE_ABILITIES]":
-                    data.UnlockedPhoneAbilities.Add(line);
+                        data.UnlockedPhoneAbilities.Add(line);
                     break;
                 case "[DRAWERS]":
                     if (int.TryParse(line, out int d))
@@ -114,17 +116,31 @@ public static class APSaveManager
                     break;
             }
         }
+
         APState.UnlockedDrawers = data.UnlockedDrawers;
         APState.ProcessedItemCount = data.ProcessedItemCount;
 
         ApplyToState();
         EnsureFallbackCall();
         EnsureStartingPowerups();
+        EnsureStartingAbilities();
 
         APState.APSaveLoaded = true;
         APResyncManager.TryAutoResync();
         APState.SuppressDrawerUnlockQuestion = false;
         Plugin.Log.LogInfo("[AP] AP save loaded");
+    }
+    private static void EnsureStartingAbilities()
+    {
+        foreach (var p in APItems.StartingAbilities)
+        {
+            string name = p.ToString();
+
+            if (!data.UnlockedPhoneAbilities.Contains(name))
+            {
+                data.UnlockedPhoneAbilities.Add(name);
+            }
+        }
     }
 
     private static void EnsureStartingPowerups()
@@ -208,11 +224,13 @@ public static class APSaveManager
 
         foreach (string s in data.UnlockedPowerups)
             if (Enum.TryParse(s, out PowerupScript.Identifier p))
-                APState.UnlockedPowerups.Add(p);
+                if (!APState.UnlockedPowerups.Contains(p))
+                    APState.UnlockedPowerups.Add(p);
 
         foreach (string s in data.UnlockedPhoneAbilities)
             if (Enum.TryParse(s, out AbilityScript.Identifier a))
-                APState.UnlockedPhoneAbilities.Add(a);
+                    if (!APState.UnlockedPhoneAbilities.Contains(a))
+                        APState.UnlockedPhoneAbilities.Add(a);
 
         APState.UnlockedDrawers = data.UnlockedDrawers;
 
@@ -236,6 +254,7 @@ public static class APSaveManager
             data.UnlockedPhoneAbilities.Add(a.ToString());
 
         EnsureStartingPowerups();
+        EnsureStartingAbilities();
 
         data.UnlockedDrawers = APState.UnlockedDrawers;
 

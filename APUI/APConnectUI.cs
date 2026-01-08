@@ -18,6 +18,16 @@ public class APConnectUI : MonoBehaviour
 
     void Update()
     {
+        if (!isConnecting)
+        {
+            if (APState.IsConnected)
+            {
+                statusText = "Connected";
+            } else
+            {
+                statusText = "Disconnected";
+            }
+        }
         if (Input.GetKeyDown(KeyCode.F8) && !APUITrapPopup.Instance.isShowing)
         {
             ToggleUI();
