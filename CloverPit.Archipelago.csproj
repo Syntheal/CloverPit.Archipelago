@@ -139,7 +139,6 @@
     <Compile Include="Patches\Locations\APDoorOpenPatch.cs" />
     <Compile Include="Patches\Locations\APKeysPatch.cs" />
     <Compile Include="Patches\Locations\APToiletPatch.cs" />
-    <Compile Include="Patches\Locations\SlotMachinePatch.cs" />
     <Compile Include="Patches\Keys\APRewardBoxInitializePatch.cs" />
     <Compile Include="Patches\Keys\APRewardBoxOpenPatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerCountPatch.cs" />

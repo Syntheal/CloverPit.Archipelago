@@ -3,28 +3,52 @@ using static APState;
 
 public class APConsoleUI : MonoBehaviour
 {
+    private const float ReferenceWidth = 1920f;
+    private const float ReferenceHeight = 1080f;
+
     private const float ClosedHeight = 32f;
     private const float OpenHeight = 260f;
     private const float Width = 720f;
     private const float SlideSpeed = 12f;
     private const float Padding = 10f;
-
-    private float currentHeight = ClosedHeight;
-
-    private Vector2 scrollPosition = Vector2.zero;
-
-    // Flag to determine if we need to scroll to the bottom
-    private bool shouldScrollToBottom = false;
-
     private const float TopOffset = -2f;
 
-    private Rect PanelRect =>
-        new Rect(
-            (Screen.width - Width) * 0.5f,
+    private float currentHeight = ClosedHeight;
+    private Vector2 scrollPosition = Vector2.zero;
+    private bool shouldScrollToBottom = false;
+
+    private Matrix4x4 oldMatrix;
+    private float currentScale = 1f;
+
+    private void BeginGUIScale()
+    {
+        oldMatrix = GUI.matrix;
+
+        float scaleX = Screen.width / ReferenceWidth;
+        float scaleY = Screen.height / ReferenceHeight;
+        currentScale = Mathf.Min(scaleX, scaleY);
+
+        GUI.matrix = Matrix4x4.TRS(
+            Vector3.zero,
+            Quaternion.identity,
+            new Vector3(currentScale, currentScale, 1f)
+        );
+    }
+
+    private void EndGUIScale()
+    {
+        GUI.matrix = oldMatrix;
+    }
+
+    private Rect GetPanelRect()
+    {
+        return new Rect(
+            (ReferenceWidth - Width) * 0.5f,
             Mathf.Clamp(TopOffset, -4f, 0f),
             Width,
             currentHeight
         );
+    }
 
     private void Update()
     {
@@ -45,18 +69,24 @@ public class APConsoleUI : MonoBehaviour
         if (!IsConnected)
             return;
 
-        DrawPanel(PanelRect);
+        BeginGUIScale();
+
+        Rect panel = GetPanelRect();
+        DrawPanel(panel);
 
         if (!IsAPUIOpen)
         {
-            DrawClosedHint();
+            DrawClosedHint(panel);
+            EndGUIScale();
             return;
         }
 
-        DrawConsoleContents();
+        DrawConsoleContents(panel);
+
+        EndGUIScale();
     }
 
-    private void DrawClosedHint()
+    private void DrawClosedHint(Rect panel)
     {
         float t = Mathf.InverseLerp(OpenHeight, ClosedHeight, currentHeight);
 
@@ -68,9 +98,9 @@ public class APConsoleUI : MonoBehaviour
 
         GUI.Label(
             new Rect(
-                PanelRect.x + Padding,
-                PanelRect.y + 7,
-                PanelRect.width - Padding * 2,
+                panel.x + Padding,
+                panel.y + 7,
+                panel.width - Padding * 2,
                 20
             ),
             "Press F8 to open Archipelago console",
@@ -78,28 +108,33 @@ public class APConsoleUI : MonoBehaviour
         );
     }
 
-    private void DrawConsoleContents()
+    private void DrawConsoleContents(Rect panel)
     {
         Rect headerRect = new Rect(
-            PanelRect.x + Padding,
-            PanelRect.y + Padding,
-            PanelRect.width - Padding * 2,
+            panel.x + Padding,
+            panel.y + Padding,
+            panel.width - Padding * 2,
             30
         );
+
         GUILayout.BeginArea(headerRect);
         GUILayout.Label("ARCHIPELAGO CONSOLE", TitleStyle());
         GUILayout.EndArea();
 
         Rect scrollRect = new Rect(
-            PanelRect.x + Padding,
-            PanelRect.y + Padding + 30,
-            PanelRect.width - Padding * 2,
-            PanelRect.height - Padding * 2 - 30
+            panel.x + Padding,
+            panel.y + Padding + 30,
+            panel.width - Padding * 2,
+            panel.height - Padding * 2 - 30
         );
 
         GUILayout.BeginArea(scrollRect);
 
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Width(scrollRect.width), GUILayout.Height(scrollRect.height));
+        scrollPosition = GUILayout.BeginScrollView(
+            scrollPosition,
+            GUILayout.Width(scrollRect.width),
+            GUILayout.Height(scrollRect.height)
+        );
 
         foreach (var line in APConsoleLog.Lines)
         {
@@ -107,7 +142,7 @@ public class APConsoleUI : MonoBehaviour
             GUILayout.Label(line.Text, style);
         }
 
-        if (shouldScrollToBottom && Mathf.Abs(scrollPosition.y - Mathf.Infinity) < 0.1f)
+        if (shouldScrollToBottom)
         {
             scrollPosition.y = float.MaxValue;
             shouldScrollToBottom = false;

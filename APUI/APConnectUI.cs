@@ -13,8 +13,44 @@ public class APConnectUI : MonoBehaviour
 
     private bool isConnecting = false;
 
+    private const float ReferenceWidth = 1920f;
+    private const float ReferenceHeight = 1080f;
+
     private readonly Rect panelRect = new Rect(10, 180, 320, 370);
     private const float Padding = 10f;
+
+    private Matrix4x4 oldMatrix;
+    private float currentScale = 1f;
+
+    private void BeginGUIScale()
+    {
+        oldMatrix = GUI.matrix;
+
+        float scaleX = Screen.width / ReferenceWidth;
+        float scaleY = Screen.height / ReferenceHeight;
+        currentScale = Mathf.Min(scaleX, scaleY);
+
+        GUI.matrix = Matrix4x4.TRS(
+            Vector3.zero,
+            Quaternion.identity,
+            new Vector3(currentScale, currentScale, 1f)
+        );
+    }
+
+    private void EndGUIScale()
+    {
+        GUI.matrix = oldMatrix;
+    }
+
+    private Rect GetCenteredPanel()
+    {
+        return new Rect(
+            (ReferenceWidth - panelRect.width) / 2f,
+            (ReferenceHeight - panelRect.height) / 2f,
+            panelRect.width,
+            panelRect.height
+        );
+    }
 
     void Update()
     {
@@ -22,12 +58,14 @@ public class APConnectUI : MonoBehaviour
         {
             if (APState.IsConnected)
             {
-                statusText = "Connected";
-            } else
+                statusText = "Connected (Close to interact)";
+            }
+            else
             {
                 statusText = "Disconnected";
             }
         }
+
         if (Input.GetKeyDown(KeyCode.F8) && !APUITrapPopup.Instance.isShowing)
         {
             ToggleUI();
@@ -54,26 +92,36 @@ public class APConnectUI : MonoBehaviour
         if (!APState.IsAPUIOpen)
             return;
 
-        DrawPanel(panelRect);
-        DrawCloseButton(panelRect);
+        BeginGUIScale();
+
+        Rect panel = GetCenteredPanel();
+
+        DrawPanel(panel);
+        DrawCloseButton(panel);
 
         GUILayout.BeginArea(new Rect(
-            panelRect.x + Padding,
-            panelRect.y + Padding,
-            panelRect.width - Padding * 2,
-            panelRect.height - Padding * 2
+            panel.x + Padding,
+            panel.y + Padding,
+            panel.width - Padding * 2,
+            panel.height - Padding * 2
         ));
 
         DrawContents();
 
         GUILayout.EndArea();
 
-        if (Event.current != null &&
-            panelRect.Contains(Event.current.mousePosition) &&
-            (Event.current.isMouse || Event.current.isKey))
+        if (Event.current != null)
         {
-            Event.current.Use();
+            Vector2 unscaledMouse = Event.current.mousePosition / currentScale;
+
+            if (panel.Contains(unscaledMouse) &&
+                (Event.current.isMouse || Event.current.isKey))
+            {
+                Event.current.Use();
+            }
         }
+
+        EndGUIScale();
     }
 
     private void DrawContents()
@@ -114,6 +162,7 @@ public class APConnectUI : MonoBehaviour
                 statusText = "Disconnected";
             }
         }
+
         GUILayout.Space(6);
 
         if (GUILayout.Button("Resync Items"))
@@ -121,6 +170,7 @@ public class APConnectUI : MonoBehaviour
             APClient.RequestResync();
             statusText = "Resync requested...";
         }
+
         if (!string.IsNullOrEmpty(errorText))
         {
             GUILayout.Space(6);

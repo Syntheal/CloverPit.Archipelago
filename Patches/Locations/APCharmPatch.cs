@@ -1042,60 +1042,6 @@ public static class APCharmPatch
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("ClassicPlayingCards_AceOfClubs_ProcessSpendedTickets")]
-    public static void Postfix_AceOfClubs(
-    bool considerEquippedState,
-    long ticketsToAdd)
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        if (ticketsToAdd <= 0)
-            return;
-
-        long before = GameplayData.Powerup_AceOfClubs_TicketsSpentGet();
-        long after = before + ticketsToAdd;
-
-        if (after < 3)
-            return;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_ACE_CLUBS))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_ACE_CLUBS);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Ace of Clubs activated");
-    }
-
-    private static long _lastAceOfSpadesCounter = 0;
-
-    [HarmonyPostfix]
-    [HarmonyPatch("ClassicPlayingCards_AceOfSpades_ProcessActivation")]
-    public static void Postfix_AceOfSpades(
-        bool considerEquippedState,
-        PowerupScript.Identifier powerupTriggered)
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        long current = GameplayData.Powerup_AceOfSpades_ActivationsCounterGet();
-
-        if (current <= _lastAceOfSpadesCounter)
-            return;
-
-        _lastAceOfSpadesCounter = current;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_ACE_SPADES))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_ACE_SPADES);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Ace of Spades activated");
-    }
-
-    [HarmonyPostfix]
     [HarmonyPatch("EyeOfGodTrigger")]
     public static void Postfix_EyeOfGod()
     {

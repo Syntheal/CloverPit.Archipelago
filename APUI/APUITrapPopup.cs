@@ -5,6 +5,9 @@ public class APUITrapPopup : MonoBehaviour
 {
     public static APUITrapPopup Instance { get; private set; }
 
+    private const float ReferenceWidth = 1920f;
+    private const float ReferenceHeight = 1080f;
+
     private const float PanelMaxWidth = 720f;
     private const float Padding = 20f;
     private const float ButtonHeight = 30f;
@@ -16,16 +19,35 @@ public class APUITrapPopup : MonoBehaviour
     private float panelWidth;
     private float panelHeight;
 
+    private Matrix4x4 oldMatrix;
+    private float currentScale = 1f;
+
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-        }
         else
-        {
             Destroy(gameObject);
-        }
+    }
+
+    private void BeginGUIScale()
+    {
+        oldMatrix = GUI.matrix;
+
+        float scaleX = Screen.width / ReferenceWidth;
+        float scaleY = Screen.height / ReferenceHeight;
+        currentScale = Mathf.Min(scaleX, scaleY);
+
+        GUI.matrix = Matrix4x4.TRS(
+            Vector3.zero,
+            Quaternion.identity,
+            new Vector3(currentScale, currentScale, 1f)
+        );
+    }
+
+    private void EndGUIScale()
+    {
+        GUI.matrix = oldMatrix;
     }
 
     private void Update()
@@ -41,24 +63,34 @@ public class APUITrapPopup : MonoBehaviour
         if (!isShowing)
             return;
 
-        panelWidth = Mathf.Min(PanelMaxWidth, Screen.width * 0.8f);
+        BeginGUIScale();
 
-        panelHeight = Mathf.Max(240f, 80f + (message.Split('\n').Length * 20f) + ButtonHeight + Padding * 2);
+        panelWidth = Mathf.Min(PanelMaxWidth, ReferenceWidth * 0.8f);
+
+        int lineCount = string.IsNullOrEmpty(message) ? 1 : message.Split('\n').Length;
+        panelHeight = Mathf.Max(240f, 80f + (lineCount * 20f) + ButtonHeight + Padding * 2);
 
         Rect panelRect = new Rect(
-            (Screen.width - panelWidth) * 0.5f,
-            (Screen.height - panelHeight) * 0.5f,
+            (ReferenceWidth - panelWidth) * 0.5f,
+            (ReferenceHeight - panelHeight) * 0.5f,
             panelWidth,
             panelHeight
         );
 
         DrawPanel(panelRect);
         DrawContents(panelRect);
+
+        EndGUIScale();
     }
 
     private void DrawContents(Rect panelRect)
     {
-        GUILayout.BeginArea(new Rect(panelRect.x + Padding, panelRect.y + Padding, panelRect.width - Padding * 2, panelRect.height - Padding * 2));
+        GUILayout.BeginArea(new Rect(
+            panelRect.x + Padding,
+            panelRect.y + Padding,
+            panelRect.width - Padding * 2,
+            panelRect.height - Padding * 2
+        ));
 
         GUILayout.Label("TRAP ACTIVATED", TitleStyle());
         GUILayout.Space(12);
@@ -67,7 +99,6 @@ public class APUITrapPopup : MonoBehaviour
         GUILayout.Label($"Lost: {message}", ContentStyle());
 
         GUILayout.Space(20);
-
         GUILayout.Label("Be careful! More traps may be on the way.", ContentStyle());
 
         GUILayout.Space(10);
@@ -97,7 +128,6 @@ public class APUITrapPopup : MonoBehaviour
     private void Open()
     {
         isShowing = true;
-
         EnableCursor();
         APFreezeHelper.FreezePlayer();
     }
@@ -105,11 +135,9 @@ public class APUITrapPopup : MonoBehaviour
     private void Close()
     {
         isShowing = false;
-
         APState.ShowTrapPopup = false;
         senderName = "";
         message = "";
-
         DisableCursor();
     }
 

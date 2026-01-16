@@ -53,7 +53,6 @@ public class Plugin : BaseUnityPlugin
                     {
                         if (APState.UnlockedPhoneAbilities.Add(abilityId))
                         {
-                            //APAbilityInitializeAllPatch.AddAbilityBack(abilityId);
                             Log.LogInfo($"[AP] Unlocked phone ability: {abilityId}");
                         }
                     }
