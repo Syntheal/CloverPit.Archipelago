@@ -11,8 +11,12 @@
 
     public static void GrantNext()
     {
+        APState.SkeletonsReceived++;
+        if (APState.SkeletonsReceived <= APState.UnlockedSkeleton)
+            return;
         foreach (var id in Order)
         {
+            APState.UnlockedSkeleton++;
             if (!APState.UnlockedPowerups.Contains(id))
             {
                 PowerupUnlocker.Unlock(id);

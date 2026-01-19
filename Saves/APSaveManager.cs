@@ -87,6 +87,26 @@ public static class APSaveManager
                     if (int.TryParse(line, out int d))
                         data.UnlockedDrawers = d;
                     break;
+                case "[SKELETON]":
+                    if (int.TryParse(line, out int s))
+                        data.UnlockedSkeleton = s;
+                    break;
+                case "[FILLERS]":
+                    if (int.TryParse(line, out int f))
+                        data.FillersSaved = f;
+                    break;
+                case "[CLT]":
+                    if (int.TryParse(line, out int clt))
+                        data.CloverTrapSaved = clt;
+                    break;
+                case "[CT]":
+                    if (int.TryParse(line, out int ct))
+                        data.CoinTrapSaved = ct;
+                    break;
+                case "[LUCK]":
+                    if (int.TryParse(line, out int lck))
+                        data.LuckSaved = lck;
+                    break;
                 case "[LOCATIONS]":
                     if (long.TryParse(line, out long loc))
                         data.CheckedLocations.Add(loc);
@@ -193,6 +213,26 @@ public static class APSaveManager
         sb.AppendLine(data.UnlockedDrawers.ToString());
 
         sb.AppendLine();
+        sb.AppendLine("[SKELETON]");
+        sb.AppendLine(data.UnlockedSkeleton.ToString());
+
+        sb.AppendLine();
+        sb.AppendLine("[FILLERS]");
+        sb.AppendLine(data.FillersSaved.ToString());
+
+        sb.AppendLine();
+        sb.AppendLine("[CLT]");
+        sb.AppendLine(data.CloverTrapSaved.ToString());
+
+        sb.AppendLine();
+        sb.AppendLine("[CT]");
+        sb.AppendLine(data.CoinTrapSaved.ToString());
+
+        sb.AppendLine();
+        sb.AppendLine("[LUCK]");
+        sb.AppendLine(data.LuckSaved.ToString());
+
+        sb.AppendLine();
         sb.AppendLine("[LOCATIONS]");
         foreach (long loc in data.CheckedLocations)
             sb.AppendLine(loc.ToString());
@@ -233,6 +273,11 @@ public static class APSaveManager
                         APState.UnlockedPhoneAbilities.Add(a);
 
         APState.UnlockedDrawers = data.UnlockedDrawers;
+        APState.UnlockedSkeleton = data.UnlockedSkeleton;
+        APState.FillersSaved = data.FillersSaved;
+        APState.CoinTrapSaved = data.CoinTrapSaved;
+        APState.CloverTrapSaved = data.CloverTrapSaved;
+        APState.LuckSaved = data.LuckSaved;
 
         APState.deadlinesCompleted = data.deadlinesCompleted;
         APState.goalCompleted = data.GoalCompleted;
@@ -257,6 +302,11 @@ public static class APSaveManager
         EnsureStartingAbilities();
 
         data.UnlockedDrawers = APState.UnlockedDrawers;
+        data.UnlockedSkeleton = APState.UnlockedSkeleton;
+        data.FillersSaved = APState.FillersSaved;
+        data.CoinTrapSaved = APState.CoinTrapSaved;
+        data.CloverTrapSaved = APState.CloverTrapSaved;
+        data.LuckSaved = APState.LuckSaved;
 
         data.deadlinesCompleted = APState.deadlinesCompleted;
         data.GoalCompleted = APState.goalCompleted;

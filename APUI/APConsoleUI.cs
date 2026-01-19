@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using static APState;
 
 public class APConsoleUI : MonoBehaviour
 {
+    private APConsoleLine[] cachedLines = System.Array.Empty<APConsoleLine>();
+    private int lastLineCount = 0;
+
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
 
@@ -58,9 +62,11 @@ public class APConsoleUI : MonoBehaviour
         float targetHeight = IsAPUIOpen ? OpenHeight : ClosedHeight;
         currentHeight = Mathf.Lerp(currentHeight, targetHeight, Time.unscaledDeltaTime * SlideSpeed);
 
-        if (APConsoleLog.Lines.Count > 0 && !shouldScrollToBottom)
+        int currentCount = APConsoleLog.Lines.Count;
+        if (currentCount != lastLineCount)
         {
             shouldScrollToBottom = true;
+            lastLineCount = currentCount;
         }
     }
 
@@ -85,12 +91,11 @@ public class APConsoleUI : MonoBehaviour
 
         EndGUIScale();
     }
-
     private void DrawClosedHint(Rect panel)
     {
         float t = Mathf.InverseLerp(OpenHeight, ClosedHeight, currentHeight);
 
-        Color c = Color.gray;
+        Color c = Color.ghostWhite;
         c.a = t;
 
         GUIStyle style = HintStyle();
@@ -110,6 +115,11 @@ public class APConsoleUI : MonoBehaviour
 
     private void DrawConsoleContents(Rect panel)
     {
+        if (Event.current.type == EventType.Layout)
+        {
+            cachedLines = APConsoleLog.Lines.ToArray();
+        }
+
         Rect headerRect = new Rect(
             panel.x + Padding,
             panel.y + Padding,
@@ -119,6 +129,7 @@ public class APConsoleUI : MonoBehaviour
 
         GUILayout.BeginArea(headerRect);
         GUILayout.Label("ARCHIPELAGO CONSOLE", TitleStyle());
+
         GUILayout.EndArea();
 
         Rect scrollRect = new Rect(
@@ -136,7 +147,7 @@ public class APConsoleUI : MonoBehaviour
             GUILayout.Height(scrollRect.height)
         );
 
-        foreach (var line in APConsoleLog.Lines)
+        foreach (var line in cachedLines)
         {
             GUIStyle style = GetStyleForLine(line.Type);
             GUILayout.Label(line.Text, style);

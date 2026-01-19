@@ -7,7 +7,7 @@ public static class APStoreCapsuleSafetyPatch
     private const int MIN_SHOP_ITEMS = 4;
 
     private static readonly PowerupScript.Identifier Fallback =
-        PowerupScript.Identifier.MoneyBriefCase;
+        PowerupScript.Identifier.FortuneCookie;
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(StoreCapsuleScript.InitializeAll))]

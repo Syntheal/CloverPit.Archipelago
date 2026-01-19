@@ -45,6 +45,18 @@ public static class APState
     public static bool DoorKeyUsed = false;
 
     public static int UnlockedDrawers = 0;
+    public static int DrawersReceived = 0;
+    public static int UnlockedSkeleton = 0;
+    public static int SkeletonsReceived = 0;
+    public static int FillersSaved = 0;
+    public static int FillersReceived = 0;
+    public static int CloverTrapSaved = 0;
+    public static int CloverTrapReceived = 0;
+    public static int CoinTrapSaved = 0;
+    public static int CoinTrapReceived = 0;
+    public static int LuckSaved = 0;
+    public static int LuckReceived = 0;
+
     public static bool SuppressDrawerUnlockQuestion = false;
 
     public static float CloverTrapPercent = 0.20f;

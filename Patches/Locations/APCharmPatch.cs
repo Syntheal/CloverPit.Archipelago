@@ -256,32 +256,13 @@ public static class APCharmPatch
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("TriggerConsolationPrize")]
-    public static void Postfix_Trigger_ConsolationPrize()
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        if (GameplayData.RndActivationFailsafe_ConsolationPrize != 0)
-            return;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_CONSOLATION_PRIZE))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_CONSOLATION_PRIZE);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Consolation Prize activated");
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch("DiscA_FinalizeSpin")]
+    [HarmonyPatch("DiscA_TriggerTry")]
     public static void Postfix_DiscA_FinalizeSpin()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
-        if (!PowerupScript.DiscA_IsTriggeringTime())
+        if (GameplayData.Powerup_DiscA_SpinsCounter != 7)
             return;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_DISC_A))
@@ -313,13 +294,13 @@ public static class APCharmPatch
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("DiscC_FinalizeSpin")]
+    [HarmonyPatch("DiscC_TriggerTry")]
     public static void Postfix_DiscC_FinalizeSpin()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
-        if (!PowerupScript.DiscC_IsTriggeringTime())
+        if (GameplayData.Powerup_DiscC_SpinsCounter != 7)
             return;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_DISC_C))
@@ -777,6 +758,9 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
+        if (GameplayData.Powerup_RottenPepper_LuckBonusGet() <= 0f)
+            return;
+
         if (GameplayData.RndActivationFailsafe_RottenPepper != 0)
             return;
 
@@ -796,6 +780,9 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
+        if (GameplayData.Powerup_BellPepper_LuckBonusGet() <= 0f)
+            return;
+
         if (GameplayData.RndActivationFailsafe_BellPepper != 0)
             return;
 
@@ -813,6 +800,9 @@ public static class APCharmPatch
     public static void Postfix_Trigger_GoldenPepper()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
+            return;
+
+        if (GameplayData.Powerup_GoldenPepper_LuckBonusGet() <= 0f)
             return;
 
         if (GameplayData.RndActivationFailsafe_GoldenPepper != 0)
@@ -960,7 +950,7 @@ public static class APCharmPatch
         APLocationManager.Complete(APLocations.ACTIVATE_MYSTICAL_TOMATO);
         APSaveManager.Save();
 
-        Plugin.Log.LogInfo("[AP] Mystical Tomato activated");
+        Plugin.Log.LogInfo("[AP] Magical Tomato activated");
     }
 
     [HarmonyPostfix]

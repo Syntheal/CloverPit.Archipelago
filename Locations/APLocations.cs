@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public static class APLocations
 {
@@ -11,13 +12,6 @@ public static class APLocations
     public static long GetKeyLocation(int KeyIndex)
     {
         return KEY_LOCATION_BASE + KeyIndex;
-    }
-    public static long GetJackpotLocation(SymbolScript.Kind jackpotKind)
-    {
-        int index = (int)jackpotKind;
-        if (index < 1 || index >= (int)SymbolScript.Kind.count) return 0;
-
-        return 223600 + index;
     }
 
     public const long ACTIVATE_FAKE_COIN = 200_001;
@@ -33,7 +27,6 @@ public static class APLocations
     public const long ACTIVATE_PENTACLE = 200_011;
     public const long ACTIVATE_DYNAMO = 200_012;
     public const long ACTIVATE_YELLOW_STAR = 200_013;
-    public const long ACTIVATE_CONSOLATION_PRIZE = 200_014;
     public const long ACTIVATE_DISC_A = 200_015;
     public const long ACTIVATE_DISC_B = 200_016;
     public const long ACTIVATE_DISC_C = 200_017;
@@ -112,33 +105,6 @@ public static class APLocations
     public const long SKELETON_LEG_1 = 202_004;
     public const long SKELETON_LEG_2 = 202_005;
 
-    public const long EARN_10K_ROUND = 205_001;
-    public const long EARN_100K_ROUND = 205_002;
-    public const long EARN_1M_ROUND = 205_003;
-    public const long EARN_10M_ROUND = 205_004;
-    public const long EARN_100M_ROUND = 205_005;
-
-    public const long HIT_MODIFIER_INTEREST = 205_006;
-    public const long HIT_MODIFIER_GOLDEN = 205_007;
-    public const long HIT_MODIFIER_CHAIN = 205_008;
-    public const long HIT_MODIFIER_BATTERY = 205_009;
-    public const long HIT_MODIFIER_CLOVER_TICKET = 205_010;
-    public const long HIT_MODIFIER_REPETITION = 205_011;
-
-    public const long EARN_10K_SPIN= 205_012;
-    public const long EARN_100K_SPIN = 205_013;
-    public const long EARN_1M_SPIN = 205_014;
-    public const long EARN_10M_SPIN = 205_015;
-    public const long EARN_100M_SPIN = 205_016;
-
-    public const long HAVE_50_CLOVER_TICKETS = 206001;
-    public const long HAVE_100_CLOVER_TICKETS = 206002;
-    public const long HAVE_150_CLOVER_TICKETS = 206003;
-    public const long HAVE_200_CLOVER_TICKETS = 206004;
-    public const long HAVE_250_CLOVER_TICKETS = 206005;
-
-    public const long GOOD_ENDING = 999_997;
-    public const long BAD_ENDING = 999_998;
     public const long GOAL_COMPLETE = 999_999;
 
     public const long CALL_EXTRA_SPACE = 200_100;
@@ -191,7 +157,36 @@ public static class APLocations
     public const long CALL_HOLY_PATTERNS_VALUE_3_LESS_ELEMENTS = 200_141;
     public const long CALL_HOLY_PATTERNS_VALUE_4_MORE_ELEMENTS = 200_142;
 
-    public static readonly Dictionary<string, long> LocationNamesToIds = new Dictionary<string, long>
+    public const long WIN_SOMETHING = 200_149;
+    public const long SEND_HORIZONTAL3 = 200_150;
+    public const long SEND_VERTICAL3 = 200_151;
+    public const long SEND_DIAGONAL3 = 200_152;
+    public const long SEND_HORIZONTAL4 = 200_153;
+    public const long SEND_HORIZONTAL5 = 200_154;
+    public const long SEND_PYRAMID = 200_155;
+    public const long SEND_INVERTEDPYRAMID = 200_156;
+    public const long SEND_TRIANGLÆ = 200_157;
+    public const long SEND_INVERTEDTRIANGLE = 200_158;
+    public const long SEND_EYE = 200_159;
+    public const long SEND_JACKPOT = 200_160;
+
+    public const long SEND_LEMONS = 200_161;
+    public const long SEND_CHERRY = 200_162;
+    public const long SEND_CLOVER = 200_163;
+    public const long SEND_BELL = 200_164;
+    public const long SEND_DIAMOND = 200_165;
+    public const long SEND_COINS = 200_166;
+    public const long SEND_SEVEN = 200_167;
+
+    public const long SEND_LEMONS_JACKPOT = 200_168;
+    public const long SEND_CHERRY_JACKPOT = 200_169;
+    public const long SEND_CLOVER_JACKPOT = 200_170;
+    public const long SEND_BELL_JACKPOT = 200_171;
+    public const long SEND_DIAMOND_JACKPOT = 200_172;
+    public const long SEND_COINS_JACKPOT = 200_173;
+    public const long SEND_SEVEN_JACKPOT = 200_174;
+
+    public static readonly Dictionary<string, long> LocationNamesToIds = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase)
     {
         { "Trigger Fake Coin", ACTIVATE_FAKE_COIN },
         { "Trigger Ankh", ACTIVATE_ANKH },
@@ -206,17 +201,12 @@ public static class APLocations
         { "Trigger Pentacle", ACTIVATE_PENTACLE },
         { "Trigger Dynamo", ACTIVATE_DYNAMO },
         { "Trigger Little Star", ACTIVATE_YELLOW_STAR },
-        { "Trigger Consolation Prize", ACTIVATE_CONSOLATION_PRIZE },
         { "Trigger Disc A", ACTIVATE_DISC_A },
         { "Trigger Disc B", ACTIVATE_DISC_B },
         { "Trigger Disc C", ACTIVATE_DISC_C },
         { "Smoke Some Cigarettes", SMOKE_CIGS },
-        { "Trigger Potato Battery", ACTIVATE_POTATO },
-        { "Trigger Toy Train", ACTIVATE_TOY_TRAIN },
-        { "Trigger Steam Locomotive", ACTIVATE_STEAM_LOCOMOTIVE },
-        { "Trigger Diesel Locomotive", ACTIVATE_DIESEL_LOCOMOTIVE },
-        { "Trigger Clover Pot", ACTIVATE_CLOVER_POT },
-        { "Trigger Clover Field", ACTIVATE_CLOVER_FIELD },
+        { "Trigger CloverPot", ACTIVATE_CLOVER_POT },
+        { "Trigger CloverField", ACTIVATE_CLOVER_FIELD },
         { "Trigger Mushrooms", ACTIVATE_SHROOMS },
         { "Trigger Vine's Soup", ACTIVATE_VINE_SHROOM },
         { "Trigger Very Big Mushroom", ACTIVATE_GIANT_SHROOM },
@@ -227,8 +217,8 @@ public static class APLocations
         { "Trigger Abstract Painting", ACTIVATE_ABSTRACT_PAINTING },
         { "Trigger Pareidolia", ACTIVATE_PAREIDOLIA },
         { "Trigger Hourglass", ACTIVATE_HOURGLASS },
-        { "Trigger Seven Sins Stone", ACTIVATE_7_SINS_STONE },
-        { "Trigger Clover Bell", ACTIVATE_CLOVER_BELL },
+        { "Trigger 7 Sins Stone", ACTIVATE_7_SINS_STONE },
+        { "Trigger CloverBell", ACTIVATE_CLOVER_BELL },
         { "Trigger Red Pepper", ACTIVATE_RED_PEPPER },
         { "Trigger Green Pepper", ACTIVATE_GREEN_PEPPER },
         { "Trigger Rotten Pepper", ACTIVATE_ROTTEN_PEPPER },
@@ -240,18 +230,11 @@ public static class APLocations
         { "Trigger Rosary", ACTIVATE_ROSARY },
         { "Trigger Book Of Shadows", ACTIVATE_BOOK_OF_SHADOWS },
         { "Trigger Gabihbb'h", ACTIVATE_GABIBBH },
-        { "Trigger Mystical Tomato", ACTIVATE_MYSTICAL_TOMATO },
+        { "Trigger Magical Tomato", ACTIVATE_MYSTICAL_TOMATO },
         { "Trigger Ritual Bell", ACTIVATE_RITUAL_BELL },
         { "Trigger Crystal Skull", ACTIVATE_CRYSTAL_SKULL },
         { "Trigger Ace Of Hearts", ACTIVATE_ACE_HEARTS },
-        { "Trigger Ace Of Clubs", ACTIVATE_ACE_CLUBS },
         { "Trigger Ace Of Diamonds", ACTIVATE_ACE_DIAMONDS },
-        { "Trigger Ace Of Spades", ACTIVATE_ACE_SPADES },
-        { "Trigger Eye Of God", ACTIVATE_EYE_OF_GOD },
-        { "Trigger Holy Spirit", ACTIVATE_HOLY_SPIRIT },
-        { "Trigger Eternity", ACTIVATE_ETERNITY },
-        { "Trigger Adam's Ribcage", ACTIVATE_ADAMS_RIBCAGE },
-        { "Trigger Ophanim Wheels", ACTIVATE_OPHANIM_WHEELS },
         { "Trigger D4", ACTIVATE_DICE_4 },
         { "Trigger D6", ACTIVATE_DICE_6 },
         { "Trigger D20", ACTIVATE_DICE_20 },
@@ -277,7 +260,7 @@ public static class APLocations
         { "Activate Angel's Hand", RED_BUTTON_ANGEL },
 
         { "Take A Piss", TAKE_A_PISS },
-        { "Take A Dump", TAKE_A_DUMP },
+        { "Take A Shit", TAKE_A_DUMP },
 
         { "Equip Skeleton Head", SKELETON_HEAD },
         { "Equip Skeleton Arm 1", SKELETON_ARM_1 },
@@ -285,33 +268,6 @@ public static class APLocations
         { "Equip Skeleton Leg 1", SKELETON_LEG_1 },
         { "Equip Skeleton Leg 2", SKELETON_LEG_2 },
 
-        { "Earn 10k coins in one round", EARN_10K_ROUND },
-        { "Earn 100k coins in one round", EARN_100K_ROUND },
-        { "Earn 1m coins in one round", EARN_1M_ROUND },
-        { "Earn 10m coins in one round", EARN_10M_ROUND },
-        { "Earn 100m coins in one round", EARN_100M_ROUND },
-
-        { "Hit A Token Modifier", HIT_MODIFIER_INTEREST },
-        { "Hit A Golden Modifier", HIT_MODIFIER_GOLDEN },
-        { "Hit A Chain Modifier", HIT_MODIFIER_CHAIN },
-        { "Hit A Battery Modifier", HIT_MODIFIER_BATTERY },
-        { "Hit A Clover Ticket Modifier", HIT_MODIFIER_CLOVER_TICKET },
-        { "Hit A Repetition Modifier", HIT_MODIFIER_REPETITION },
-
-        { "Earn 10k coins in one spin", EARN_10K_SPIN },
-        { "Earn 100k coins in one spin", EARN_100K_SPIN },
-        { "Earn 1m coins in one spin", EARN_1M_SPIN },
-        { "Earn 10m coins in one spin", EARN_10M_SPIN },
-        { "Earn 100m coins in one spin", EARN_100M_SPIN },
-
-        { "Have 50 Clover Tickets", HAVE_50_CLOVER_TICKETS },
-        { "Have 100 Clover Tickets", HAVE_100_CLOVER_TICKETS },
-        { "Have 150 Clover Tickets", HAVE_150_CLOVER_TICKETS },
-        { "Have 200 Clover Tickets", HAVE_200_CLOVER_TICKETS },
-        { "Have 250 Clover Tickets", HAVE_250_CLOVER_TICKETS },
-
-        { "Good Ending Achieved", GOOD_ENDING },
-        { "Bad Ending Achieved", BAD_ENDING },
         { "Goal Completed", GOAL_COMPLETE },
 
         { "Call: Please don't throw my stuff away!", CALL_EXTRA_SPACE },
@@ -326,20 +282,20 @@ public static class APLocations
         { "Call: It's kinda fun!", CALL_RND_CHARM_MOD_GAMBLER },
         { "Call: I'm sure the value will rise!", CALL_RND_CHARM_MOD_SPECULATIVE },
 
-        { "Call: Can I get some Energy Drinks?", CALL_RECHARGE_RED_BUTTON_POWERUPS },
+        { "Call: Can you give me some Energy Drinks?", CALL_RECHARGE_RED_BUTTON_POWERUPS },
 
         { "Call: Life gave me lemons", CALL_SYMBOL_CHANCES_LEMON },
         { "Call: I used to eat healthy...", CALL_SYMBOL_CHANCES_CHERRY },
         { "Call: Today's my lucky day!", CALL_SYMBOL_CHANCES_CLOVER },
         { "Call: I need to be there!", CALL_SYMBOL_CHANCES_BELL },
-        { "Call: Please, I'll give you anything!", CALL_SYMBOL_CHANCES_DIAMOND },
+        { "Call: Please! I'll give you anything!", CALL_SYMBOL_CHANCES_DIAMOND },
         { "Call: I need money!", CALL_SYMBOL_CHANCES_COINS },
         { "Call: I didn't hurt anybody...", CALL_SYMBOL_CHANCES_SEVEN },
 
         { "Call: I need supplements!", CALL_SYMBOLS_VALUE_LEMON_AND_CHERRY },
         { "Call: I'm feeling lucky!", CALL_SYMBOLS_VALUE_CLOVER_AND_BELL },
         { "Call: Gold and Diamonds are a good investment!", CALL_SYMBOLS_VALUE_DIAMOND_AND_COINS },
-        { "Call: I'm gonna go All In!", CALL_SYMBOLS_VALUE_SEVEN },
+        { "Call: I'm gonna go \"All In\"!", CALL_SYMBOLS_VALUE_SEVEN },
 
         { "Call: I'm thinking of some strategies!", CALL_PATTERNS_VALUE_3_LESS_ELEMENTS },
         { "Call: I found a winning strategy!", CALL_PATTERNS_VALUE_4_MORE_ELEMENTS },
@@ -364,6 +320,35 @@ public static class APLocations
         { "Call: I want to address some stuff.", CALL_HOLY_PATTERNS_VALUE_3_LESS_ELEMENTS },
         { "Call: I'll take back control of my life.", CALL_HOLY_PATTERNS_VALUE_4_MORE_ELEMENTS },
 
+        { "Win Something", WIN_SOMETHING },
+        { "Score HOR Pattern", SEND_HORIZONTAL3 },
+        { "Score VERT Pattern", SEND_VERTICAL3 },
+        { "Score DIAG Pattern", SEND_DIAGONAL3 },
+        { "Score HOR-L Pattern", SEND_HORIZONTAL4 },
+        { "Score HOR-XL Pattern", SEND_HORIZONTAL5 },
+        { "Score ZIG Pattern", SEND_PYRAMID },
+        { "Score ZAG Pattern", SEND_INVERTEDPYRAMID },
+        { "Score ABOVE Pattern", SEND_TRIANGLÆ },
+        { "Score BELOW Pattern", SEND_INVERTEDTRIANGLE },
+        { "Score EYE Pattern", SEND_EYE },
+        { "Score a Jackpot", SEND_JACKPOT },
+
+        { "Score with Lemons", SEND_LEMONS },
+        { "Score with Cherries", SEND_CHERRY },
+        { "Score with Clovers", SEND_CLOVER },
+        { "Score with Bells", SEND_BELL },
+        { "Score with Diamonds", SEND_DIAMOND },
+        { "Score with Treasures", SEND_COINS },
+        { "Score with Sevens", SEND_SEVEN },
+
+        { "Score a Jackpot with Lemons", SEND_LEMONS_JACKPOT },
+        { "Score a Jackpot with Cherries", SEND_CHERRY_JACKPOT },
+        { "Score a Jackpot with Clovers", SEND_CLOVER_JACKPOT },
+        { "Score a Jackpot with Bells", SEND_BELL_JACKPOT },
+        { "Score a Jackpot with Diamonds", SEND_DIAMOND_JACKPOT },
+        { "Score a Jackpot with Treasures", SEND_COINS_JACKPOT },
+        { "Score a Jackpot with Sevens", SEND_SEVEN_JACKPOT },
+
         { "Deadline 1 Complete", GetDeadlineLocation(1) },
         { "Deadline 2 Complete", GetDeadlineLocation(2) },
         { "Deadline 3 Complete", GetDeadlineLocation(3) },
@@ -374,27 +359,11 @@ public static class APLocations
         { "Deadline 8 Complete", GetDeadlineLocation(8) },
         { "Deadline 9 Complete", GetDeadlineLocation(9) },
         { "Deadline 10 Complete", GetDeadlineLocation(10) },
-        { "Deadline 11 Complete", GetDeadlineLocation(11) },
-        { "Deadline 12 Complete", GetDeadlineLocation(12) },
-        { "Deadline 13 Complete", GetDeadlineLocation(13) },
-        { "Deadline 14 Complete", GetDeadlineLocation(14) },
-        { "Deadline 15 Complete", GetDeadlineLocation(15) },
 
         { "Key 1 Collected", GetKeyLocation(0) },
         { "Key 2 Collected", GetKeyLocation(1) },
         { "Key 3 Collected", GetKeyLocation(2) },
         { "Key 4 Collected", GetKeyLocation(3) },
-
-        { "Jackpot With Lemon", GetJackpotLocation(SymbolScript.Kind.lemon) },
-        { "Jackpot With Cherry", GetJackpotLocation(SymbolScript.Kind.cherry) },
-        { "Jackpot With Clover", GetJackpotLocation(SymbolScript.Kind.clover) },
-        { "Jackpot With Bell", GetJackpotLocation(SymbolScript.Kind.bell) },
-        { "Jackpot With Diamond", GetJackpotLocation(SymbolScript.Kind.diamond) },
-        { "Jackpot With Treasure", GetJackpotLocation(SymbolScript.Kind.coins) },
-        { "Jackpot With Seven", GetJackpotLocation(SymbolScript.Kind.seven) },
-
-        { "Trigger 666", GetJackpotLocation(SymbolScript.Kind.six) },
-        { "Trigger 999", GetJackpotLocation(SymbolScript.Kind.nine) }
     };
 
     public static void PopulateLocationNames()
@@ -423,4 +392,13 @@ public static class APLocations
         }
         return null;
     }
+
+    public static long GetLocationId(string locationName)
+    {
+        if (LocationNamesToIds.TryGetValue(locationName, out long id))
+            return id;
+
+        return -1L;
+    }
+
 }

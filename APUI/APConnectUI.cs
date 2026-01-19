@@ -16,7 +16,7 @@ public class APConnectUI : MonoBehaviour
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
 
-    private readonly Rect panelRect = new Rect(10, 180, 320, 370);
+    private readonly Rect panelRect = new Rect(10, 180, 320, 400);
     private const float Padding = 10f;
 
     private Matrix4x4 oldMatrix;
@@ -132,7 +132,32 @@ public class APConnectUI : MonoBehaviour
         GUILayout.Label("Status:");
         GUILayout.Label(statusText, StatusStyle(APState.IsConnected));
 
-        GUILayout.Space(14);
+        GUILayout.Space(3);
+
+        GUIStyle valueStyle = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 13,
+            fontStyle = FontStyle.Bold,
+            normal = { textColor = Color.green }
+        };
+
+        GUILayout.BeginHorizontal(GUILayout.Height(20));
+
+        if (APState.IsConnected)
+        {
+            GUILayout.Label(" Bonus Luck:", GUILayout.Width(78), GUILayout.Height(20));
+            GUILayout.Label(APState.LuckSaved.ToString(), valueStyle, GUILayout.Width(8), GUILayout.Height(20));
+        }
+        else
+        {
+            GUILayout.Label(" Connect To Play", GUILayout.Width(106), GUILayout.Height(20));
+            GUILayout.Label(" ", GUILayout.Width(8), GUILayout.Height(20));
+        }
+
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(3);
 
         GUILayout.Label("Host");
         DrawReadOnlyTextField(ref host, APState.IsConnected || isConnecting);

@@ -17,15 +17,6 @@ public static class APDoorOpenPatch
 
         bool isGoodEnding = GameplayData.NineNineNine_IsTime();
 
-        if (isGoodEnding)
-        {
-            APLocationManager.Complete(APLocations.GOOD_ENDING);
-        }
-        else
-        {
-            APLocationManager.Complete(APLocations.BAD_ENDING);
-        }
-
         if (APState.goalType == "key")
         {
             bool matchesRequiredEnding =

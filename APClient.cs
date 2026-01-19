@@ -264,6 +264,12 @@ public static class APClient
         if (!APState.IsConnected)
             return;
 
+        APState.DrawersReceived = 0;
+        APState.SkeletonsReceived = 0;
+        APState.CloverTrapReceived = 0;
+        APState.CoinTrapReceived = 0;
+        APState.FillersReceived = 0;
+        APState.LuckReceived = 0;
         Session.Socket.SendPacket(new SyncPacket());
         Plugin.Log.LogInfo("[AP] Requested item sync");
     }
@@ -356,7 +362,17 @@ public static class APItems
         new HashSet<PowerupScript.Identifier>
         {
             PowerupScript.Identifier.FakeCoin,
-            PowerupScript.Identifier.MoneyBriefCase,
+            PowerupScript.Identifier.FortuneCookie,
+            PowerupScript.Identifier._999_AdamsRibcage,
+            PowerupScript.Identifier._999_AngelHand,
+            PowerupScript.Identifier._999_Aureola,
+            PowerupScript.Identifier._999_Eternity,
+            PowerupScript.Identifier._999_EyeOfGod,
+            PowerupScript.Identifier._999_HolySpirit,
+            PowerupScript.Identifier._999_OphanimWheels,
+            PowerupScript.Identifier._999_SacredHeart,
+            PowerupScript.Identifier._999_TheBlood,
+            PowerupScript.Identifier._999_TheBody
         };
 
     public static readonly HashSet<AbilityScript.Identifier> StartingAbilities =

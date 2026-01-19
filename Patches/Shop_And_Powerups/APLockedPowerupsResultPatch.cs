@@ -7,7 +7,7 @@ using System.Linq;
 public static class APLockedPowerupsResultPatch
 {
     static readonly PowerupScript.Identifier FILLER =
-        PowerupScript.Identifier.MoneyBriefCase;
+        PowerupScript.Identifier.FortuneCookie;
 
     [HarmonyPostfix]
     [HarmonyPatch("_LockedPowerupsResultingList_Compute")]

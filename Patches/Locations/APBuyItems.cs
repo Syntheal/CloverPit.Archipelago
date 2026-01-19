@@ -22,7 +22,7 @@ public static class APBuyItems
         { "Charm: Red Shiny Rock", 123010 },
         { "Charm: Tarot Deck", 123011 },
         { "Charm: Dung Beetle", 123012 },
-        { "Charm: Grandmas Purse", 123013 },
+        { "Charm: Grandma's Purse", 123013 },
         { "Charm: Pentacle", 123014 },
         { "Charm: Property Certificate", 123015 },
         { "Charm: Nuclear Button", 123016 },
@@ -49,7 +49,7 @@ public static class APBuyItems
         { "Charm: Channeler of Fortune", 123037 },
         { "Charm: Nose", 123038 },
         { "Charm: Eye Jar", 123039 },
-        { "Charm: Voice Mail", 123040 },
+        { "Charm: Voicemail", 123040 },
         { "Charm: Ring Bell", 123041 },
         { "Charm: Consolation Prize", 123042 },
         { "Charm: Dark Lotus", 123043 },
@@ -61,7 +61,7 @@ public static class APBuyItems
         { "Charm: Disc B", 123049 },
         { "Charm: Disc C", 123050 },
         { "Charm: Cardboard House", 123051 },
-        { "Charm: Cigarettes", 123052 },
+        { "Charm: Lost Briefcase", 123052 },
         { "Charm: Electricity Meter", 123053 },
         { "Charm: Potato Battery", 123054 },
         { "Charm: Ancient Coin", 123055 },
@@ -71,9 +71,9 @@ public static class APBuyItems
         { "Charm: Steam Locomotive", 123059 },
         { "Charm: Diesel Locomotive", 123060 },
         { "Charm: Clover Voucher", 123061 },
-        { "Charm: Clover Pot", 123062 },
-        { "Charm: Clover Pet", 123063 },
-        { "Charm: Clover Field", 123064 },
+        { "Charm: CloverPot", 123062 },
+        { "Charm: CloverPet", 123063 },
+        { "Charm: CloverField", 123064 },
         { "Charm: Mushrooms", 123065 },
         { "Charm: Vine's Soup", 123066 },
         { "Charm: Very Big Mushroom", 123067 },
@@ -85,9 +85,9 @@ public static class APBuyItems
         { "Charm: Pareidolia", 123073 },
         { "Charm: Hourglass", 123074 },
         { "Charm: Fruit Basket", 123075 },
-        { "Charm: Seven Sins Stone", 123076 },
+        { "Charm: 7 Sins Stone", 123076 },
         { "Charm: Necklace", 123077 },
-        { "Charm: Clover Bell", 123078 },
+        { "Charm: CloverBell", 123078 },
         { "Charm: Red Pepper", 123079 },
         { "Charm: Green Pepper", 123080 },
         { "Charm: Rotten Pepper", 123081 },
@@ -102,7 +102,7 @@ public static class APBuyItems
         { "Charm: Book Of Shadows", 123090 },
         { "Charm: Gabihbb'h", 123091 },
         { "Charm: Possessed Cell Phone", 123092 },
-        { "Charm: Mystical Tomato", 123093 },
+        { "Charm: Magical Tomato", 123093 },
         { "Charm: Ritual Bell", 123094 },
         { "Charm: Crystal Skull", 123095 },
         { "Charm: Evil Deal", 123096 },
@@ -153,22 +153,15 @@ public static class APBuyItems
         { "Charm: D4", 123141 },
         { "Charm: D6", 123142 },
         { "Charm: D20", 123143 },
-        { "Charm: Angel's Hand", 123144 },
-        { "Charm: Eye Of God", 123145 },
-        { "Charm: Holy Spirit", 123146 },
-        { "Charm: Sacred Heart", 123147 },
-        { "Charm: Halo", 123148 },
-        { "Charm: The Blood", 123149 },
-        { "Charm: The Body", 123150 },
-        { "Charm: Eternity", 123151 },
-        { "Charm: Adam's Ribcage", 123152 },
-        { "Charm: Ophanim Wheels", 123153 },
+        { "Charm: Fake Coin", 123144 }
     };
 
     public static long GetBuyLocationId(int charmItemId)
     {
         return 230000 + charmItemId;
     }
+
+    private static string PendingAPActivation = null;
 
     [HarmonyPrefix]
     [HarmonyPatch("BuyTry")]
@@ -180,9 +173,6 @@ public static class APBuyItems
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
-        if (__result == BuyResult.Empty || __result == BuyResult.NotEnoughCurrency)
-            return;
-
         if (id < 0 || id >= storePowerups.Count() || storePowerups[id] == null)
         {
             Plugin.Log.LogError($"[AP] storePowerups[{id}] is null or out of bounds. Could not process purchase.");
@@ -192,16 +182,27 @@ public static class APBuyItems
         PowerupScript powerupScript = storePowerups[id];
 
         if (IsSkeletonPowerup(powerupScript.identifier))
-        {
             return;
-        }
 
         string charmName = APItemMapping.IdentifierToPowerup(powerupScript.identifier);
 
         if (charmName.StartsWith("Skeleton"))
             return;
 
-        if (CharmToItemId.TryGetValue(charmName, out var charmItemId))
+        PendingAPActivation = charmName;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("BuyTry")]
+    public static void Postfix_BuyTry(int id, ref BuyResult __result)
+    {
+        if (!APState.IsConnected || !APState.APSaveLoaded || __result != BuyResult.Success)
+            return;
+
+        if (string.IsNullOrEmpty(PendingAPActivation))
+            return;
+
+        if (CharmToItemId.TryGetValue(PendingAPActivation, out var charmItemId))
         {
             long locationId = GetBuyLocationId(charmItemId);
 
@@ -212,6 +213,8 @@ public static class APBuyItems
                 Plugin.Log.LogInfo($"Activated location: {APLocations.GetLocationName(locationId)}");
             }
         }
+
+        PendingAPActivation = null;
     }
     private static bool IsSkeletonPowerup(PowerupScript.Identifier identifier)
     {

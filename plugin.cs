@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.3")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.5")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -23,6 +23,10 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(trap);
         trap.AddComponent<APUITrapPopup>();
 
+        var legend = new GameObject("APSuffixLegend");
+        DontDestroyOnLoad(legend);
+        legend.AddComponent<APSuffixLegendUI>();
+
         Log = Logger;
         Log.LogInfo("CloverPit Archipelago loaded");
 
@@ -34,8 +38,8 @@ public class Plugin : BaseUnityPlugin
         APClient.ItemReceived += item =>
         {
             string receiveKey = item.ReceiveKey;
-
-            if (APSaveManager.HasReceived(receiveKey))
+            Log.LogDebug($"[AP] Received: {item.ItemName}");
+            if (APSaveManager.HasReceived(receiveKey) && !item.ItemName.StartsWith("Progressive") && !item.ItemName.EndsWith("Trap") && !item.ItemName.StartsWith("10x"))
             {
                 Log.LogDebug($"[AP] Skipped duplicate item: {item.ItemName} ({receiveKey})");
                 return;
@@ -72,6 +76,12 @@ public class Plugin : BaseUnityPlugin
                 }
                 else if (item.ItemName.StartsWith("Progressive Skeleton"))
                     APSkeletonProgression.GrantNext();
+                else if (item.ItemName.StartsWith("Progressive Luck"))
+                {
+                    APState.LuckReceived++;
+                    if (APState.LuckReceived > APState.LuckSaved)
+                        APState.LuckSaved++;
+                }
                 else if (item.ItemName.StartsWith("Progressive Drawer"))
                 {
                     APState.SuppressDrawerUnlockQuestion = true;
@@ -79,13 +89,32 @@ public class Plugin : BaseUnityPlugin
                     APState.SuppressDrawerUnlockQuestion = false;
                 }
                 else if (item.ItemName.StartsWith("Coin Trap"))
-                    APTrapExecutor.TriggerCoinTrap(item.PlayerName);
+                {
+                    APState.CoinTrapReceived++;
+                    if (APState.CoinTrapReceived > APState.CoinTrapSaved)
+                    {
+                        APTrapExecutor.TriggerCloverTrap(item.PlayerName);
+                        APState.CoinTrapSaved++;
+                    }
+                }
                 else if (item.ItemName.StartsWith("Clover Trap"))
-                    APTrapExecutor.TriggerCloverTrap(item.PlayerName);
+                {
+                    APState.CloverTrapReceived++;
+                    if (APState.CloverTrapReceived > APState.CloverTrapSaved)
+                    {
+                        APTrapExecutor.TriggerCloverTrap(item.PlayerName);
+                        APState.CloverTrapSaved++;
+                    }
+                }
                 else if (item.ItemName.StartsWith("10x Clover"))
                 {
-                    GameplayData.CloverTicketsAdd(10, addToStats: true);
-                    Log.LogInfo("[AP] Granted 10 Clover Tickets for item: " + item.ItemName);
+                    APState.FillersReceived++;
+                    if (APState.FillersReceived > APState.FillersSaved)
+                    {
+                        GameplayData.CloverTicketsAdd(10, addToStats: true);
+                        Log.LogInfo("[AP] Granted 10 Clover Tickets for item: " + item.ItemName);
+                        APState.FillersSaved++;
+                    }
                 }
                 else
                     Log.LogWarning($"[AP] Item received: {item.ItemName} does nothing");
@@ -98,6 +127,7 @@ public class Plugin : BaseUnityPlugin
             }
         };
         APClient.Connected += GreyOutNewRunButtonsPatch.OnAPConnected;
+        APClient.Connected += BlockNewRunWithoutAPPatch.OnAPConnected;
     }
 }
 

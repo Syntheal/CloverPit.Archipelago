@@ -12,6 +12,9 @@ public static class APDrawerProgression
 
     public static void GrantNext(string fromPlayer)
     {
+        APState.DrawersReceived++;
+        if (APState.DrawersReceived <= APState.UnlockedDrawers)
+            return;
         if (APState.UnlockedDrawers >= MAX_DRAWERS)
             return;
 
@@ -19,25 +22,13 @@ public static class APDrawerProgression
         APState.UnlockedDrawers++;
 
         Data.game.drawersUnlocked[index] = true;
+
         APSaveManager.Save();
 
-        if (IsSafeToApplyVisualUnlock())
-        {
-            DrawersScript.Unlock(index);
-        }
+        DrawersScript.Unlock(index);
 
         Plugin.Log.LogInfo(
             "[AP] Drawer " + (index + 1) + " unlocked by " + fromPlayer
         );
-    }
-
-    private static bool IsSafeToApplyVisualUnlock()
-    {
-        return
-            DrawersScript.instance != null &&
-            !ScreenMenuScript.IsEnabled() &&
-            !DialogueScript.IsEnabled() &&
-            !PowerupTriggerAnimController.HasAnimations() &&
-            SceneManager.GetActiveScene().buildIndex == (int)Level.SceneIndex.Game;
     }
 }

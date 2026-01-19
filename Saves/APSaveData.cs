@@ -18,6 +18,11 @@ public class APSaveData
         new HashSet<string>();
 
     public int UnlockedDrawers = 0;
+    public int UnlockedSkeleton = 0;
+    public int FillersSaved = 0;
+    public int CloverTrapSaved = 0;
+    public int CoinTrapSaved = 0;
+    public int LuckSaved = 0;
     public static int CloverTrapCount;
     public static int CoinTrapCount;
     public bool GoalCompleted = false;
