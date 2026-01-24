@@ -7,12 +7,10 @@ public static class APPatternLogBootstrap
     static void Postfix(SlotMachineScript __instance)
     {
         __instance.OnPatternEvaluationStart += OnPatternScored;
-        Plugin.Log.LogInfo("[AP] Pattern logger attached to SlotMachineScript instance");
     }
 
     static void OnPatternScored(PatternInfos info)
     {
-        Plugin.Log.LogInfo($"[AP] Scored pattern: {info.patternKind} | Symbol: {info.symbolKind} | Coins: {info.coins}");
         APLocationManager.Complete(APLocations.WIN_SOMETHING);
         switch (info.patternKind)
         {
@@ -48,30 +46,6 @@ public static class APPatternLogBootstrap
                 break;
             case (PatternScript.Kind.jackpot):
                 APLocationManager.Complete(APLocations.SEND_JACKPOT);
-                switch(info.symbolKind)
-                {
-                    case (SymbolScript.Kind.lemon):
-                        APLocationManager.Complete(APLocations.SEND_LEMONS_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.cherry):
-                        APLocationManager.Complete(APLocations.SEND_CHERRY_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.clover):
-                        APLocationManager.Complete(APLocations.SEND_CLOVER_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.bell):
-                        APLocationManager.Complete(APLocations.SEND_BELL_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.diamond):
-                        APLocationManager.Complete(APLocations.SEND_DIAMOND_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.coins):
-                        APLocationManager.Complete(APLocations.SEND_COINS_JACKPOT);
-                        break;
-                    case (SymbolScript.Kind.seven):
-                        APLocationManager.Complete(APLocations.SEND_SEVEN_JACKPOT);
-                        break;
-                }
                 break;
         }
 

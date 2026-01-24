@@ -9,14 +9,13 @@ public class APConnectUI : MonoBehaviour
     private string password = "";
 
     private string statusText = "Disconnected";
-    private string errorText = "";
 
     private bool isConnecting = false;
 
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
 
-    private readonly Rect panelRect = new Rect(10, 180, 320, 400);
+    private readonly Rect panelRect = new Rect(10, 180, 320, 360);
     private const float Padding = 10f;
 
     private Matrix4x4 oldMatrix;
@@ -58,7 +57,7 @@ public class APConnectUI : MonoBehaviour
         {
             if (APState.IsConnected)
             {
-                statusText = "Connected (Close to interact)";
+                statusText = "Connected (Close to interact [F8])";
             }
             else
             {
@@ -66,7 +65,7 @@ public class APConnectUI : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.F8) && !APUITrapPopup.Instance.isShowing)
+        if (Input.GetKeyDown(KeyCode.F8))
         {
             ToggleUI();
         }
@@ -75,7 +74,6 @@ public class APConnectUI : MonoBehaviour
     private void ToggleUI()
     {
         APState.IsAPUIOpen = !APState.IsAPUIOpen;
-
         if (APState.IsAPUIOpen)
         {
             EnableCursor();
@@ -97,7 +95,6 @@ public class APConnectUI : MonoBehaviour
         Rect panel = GetCenteredPanel();
 
         DrawPanel(panel);
-        DrawCloseButton(panel);
 
         GUILayout.BeginArea(new Rect(
             panel.x + Padding,
@@ -114,10 +111,16 @@ public class APConnectUI : MonoBehaviour
         {
             Vector2 unscaledMouse = Event.current.mousePosition / currentScale;
 
-            if (panel.Contains(unscaledMouse) &&
-                (Event.current.isMouse || Event.current.isKey))
+            if (panel.Contains(unscaledMouse))
             {
-                Event.current.Use();
+                if (Event.current.isMouse)
+                {
+                    Event.current.Use();
+                }
+                else if (Event.current.isKey && Event.current.keyCode != KeyCode.F8)
+                {
+                    Event.current.Use();
+                }
             }
         }
 
@@ -183,31 +186,17 @@ public class APConnectUI : MonoBehaviour
             if (GUILayout.Button("Disconnect"))
             {
                 APClient.Disconnect();
-                APResyncManager.Reset();
                 statusText = "Disconnected";
             }
         }
-
-        GUILayout.Space(6);
-
-        if (GUILayout.Button("Resync Items"))
-        {
-            APClient.RequestResync();
-            statusText = "Resync requested...";
-        }
-
-        if (!string.IsNullOrEmpty(errorText))
-        {
-            GUILayout.Space(6);
-            GUILayout.Label(errorText, ErrorStyle());
-        }
+        GUI.enabled = true;
     }
 
     private async Task StartConnect()
     {
-        errorText = "";
         statusText = "Connecting...";
         isConnecting = true;
+        GUI.FocusControl(null);
 
         try
         {
@@ -215,18 +204,13 @@ public class APConnectUI : MonoBehaviour
 
             if (APState.IsConnected)
             {
+                BlockNewRunWithoutAPPatch.connected = true;
                 statusText = "Connected";
             }
             else
             {
                 statusText = "Disconnected";
-                errorText = "Failed to connect";
             }
-        }
-        catch (System.Exception ex)
-        {
-            statusText = "Disconnected";
-            errorText = ex.Message;
         }
         finally
         {
@@ -252,27 +236,6 @@ public class APConnectUI : MonoBehaviour
         GUI.DrawTexture(new Rect(rect.x, rect.yMax - 1, rect.width, 1), Texture2D.whiteTexture);
         GUI.DrawTexture(new Rect(rect.x, rect.y, 1, rect.height), Texture2D.whiteTexture);
         GUI.DrawTexture(new Rect(rect.xMax - 1, rect.y, 1, rect.height), Texture2D.whiteTexture);
-
-        GUI.color = old;
-    }
-
-    private void DrawCloseButton(Rect panel)
-    {
-        Rect buttonRect = new Rect(
-            panel.xMax - 40,
-            panel.y + 4,
-            36,
-            36
-        );
-
-        Color old = GUI.color;
-        GUI.color = Color.red;
-
-        if (GUI.Button(buttonRect, "X"))
-        {
-            APState.IsAPUIOpen = false;
-            DisableCursor();
-        }
 
         GUI.color = old;
     }

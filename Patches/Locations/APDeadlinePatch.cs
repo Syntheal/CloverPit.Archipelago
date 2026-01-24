@@ -41,7 +41,7 @@ public static class APDeadlinePatch
             APState.deadlinesCompleted >= APState.deadlineAmount)
         {
             APState.goalCompleted = true;
-            APLocationManager.Complete(APLocations.GOAL_COMPLETE);
+            APClient.SendGoalCompletion();
             APSaveManager.Save();
 
             Plugin.Log.LogInfo("[AP] Deadline goal completed");

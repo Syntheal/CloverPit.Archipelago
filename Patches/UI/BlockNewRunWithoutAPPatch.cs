@@ -4,7 +4,7 @@ using Panik;
 [HarmonyPatch(typeof(GeneralUiScript))]
 public static class BlockNewRunWithoutAPPatch
 {
-   public static bool connected = false;
+    public static bool connected = false;
     [HarmonyPrefix]
     [HarmonyPatch("_IntroMenuNewGame")]
     static bool Prefix()
@@ -15,11 +15,8 @@ public static class BlockNewRunWithoutAPPatch
             return false;
         }
         APState.GameStarted = true;
+        APClient._canProcessQueue = true;
+        APClient.TryProcessQueue();
         return true;
-    }
-
-    public static void OnAPConnected()
-    {
-        connected = true;
     }
 }

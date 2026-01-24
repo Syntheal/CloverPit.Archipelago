@@ -26,7 +26,6 @@ public static class APLocations
     public const long ACTIVATE_TAROT_DECK = 200_010;
     public const long ACTIVATE_PENTACLE = 200_011;
     public const long ACTIVATE_DYNAMO = 200_012;
-    public const long ACTIVATE_YELLOW_STAR = 200_013;
     public const long ACTIVATE_DISC_A = 200_015;
     public const long ACTIVATE_DISC_B = 200_016;
     public const long ACTIVATE_DISC_C = 200_017;
@@ -45,10 +44,8 @@ public static class APLocations
     public const long DISCARD_BARATHRUM = 200_030;
     public const long ACTIVATE_STAIN = 200_031;
     public const long ACTIVATE_ABSTRACT_PAINTING = 200_032;
-    public const long ACTIVATE_PAREIDOLIA = 200_033;
     public const long ACTIVATE_HOURGLASS = 200_034;
     public const long ACTIVATE_7_SINS_STONE = 200_035;
-    public const long ACTIVATE_CLOVER_BELL = 200_036;
     public const long ACTIVATE_RED_PEPPER = 200_037;
     public const long ACTIVATE_GREEN_PEPPER = 200_038;
     public const long ACTIVATE_ROTTEN_PEPPER = 200_039;
@@ -94,7 +91,6 @@ public static class APLocations
     public const long RED_BUTTON_DIAMOND_PICTURE = 200_515;
     public const long RED_BUTTON_TREASURE_PICTURE = 200_516;
     public const long RED_BUTTON_SEVEN_PICTURE = 200_517;
-    public const long RED_BUTTON_ANGEL = 200_518;
 
     public const long TAKE_A_PISS = 201_001;
     public const long TAKE_A_DUMP = 201_002;
@@ -147,16 +143,6 @@ public static class APLocations
     public const long CALL_EVIL_HALVEN_CHANCES_CLOVER_BELL = 200_133;
     public const long CALL_EVIL_HALVEN_CHANCES_DIAMOND_COINS_SEVEN = 200_134;
 
-    public const long CALL_HOLY_MULTIPLIER_SYMBOLS_1 = 200_135;
-    public const long CALL_HOLY_MULTIPLIER_PATTERNS_1 = 200_136;
-    public const long CALL_HOLY_REDUCE_CHARGES_RED_BUTTON = 200_137;
-    public const long CALL_HOLY_MODIFY_STORE_CHARMS_MAKE_1_FREE = 200_138;
-    public const long CALL_HOLY_PATTERNS_REPETITION_INCREASE = 200_139;
-    public const long CALL_HOLY_SPAWN_SACRED_CHARM = 200_140;
-
-    public const long CALL_HOLY_PATTERNS_VALUE_3_LESS_ELEMENTS = 200_141;
-    public const long CALL_HOLY_PATTERNS_VALUE_4_MORE_ELEMENTS = 200_142;
-
     public const long WIN_SOMETHING = 200_149;
     public const long SEND_HORIZONTAL3 = 200_150;
     public const long SEND_VERTICAL3 = 200_151;
@@ -178,14 +164,6 @@ public static class APLocations
     public const long SEND_COINS = 200_166;
     public const long SEND_SEVEN = 200_167;
 
-    public const long SEND_LEMONS_JACKPOT = 200_168;
-    public const long SEND_CHERRY_JACKPOT = 200_169;
-    public const long SEND_CLOVER_JACKPOT = 200_170;
-    public const long SEND_BELL_JACKPOT = 200_171;
-    public const long SEND_DIAMOND_JACKPOT = 200_172;
-    public const long SEND_COINS_JACKPOT = 200_173;
-    public const long SEND_SEVEN_JACKPOT = 200_174;
-
     public static readonly Dictionary<string, long> LocationNamesToIds = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase)
     {
         { "Trigger Fake Coin", ACTIVATE_FAKE_COIN },
@@ -200,7 +178,6 @@ public static class APLocations
         { "Trigger Tarot Deck", ACTIVATE_TAROT_DECK },
         { "Trigger Pentacle", ACTIVATE_PENTACLE },
         { "Trigger Dynamo", ACTIVATE_DYNAMO },
-        { "Trigger Little Star", ACTIVATE_YELLOW_STAR },
         { "Trigger Disc A", ACTIVATE_DISC_A },
         { "Trigger Disc B", ACTIVATE_DISC_B },
         { "Trigger Disc C", ACTIVATE_DISC_C },
@@ -215,10 +192,8 @@ public static class APLocations
         { "Throw Away Barathrum", DISCARD_BARATHRUM },
         { "Trigger Stain", ACTIVATE_STAIN },
         { "Trigger Abstract Painting", ACTIVATE_ABSTRACT_PAINTING },
-        { "Trigger Pareidolia", ACTIVATE_PAREIDOLIA },
         { "Trigger Hourglass", ACTIVATE_HOURGLASS },
         { "Trigger 7 Sins Stone", ACTIVATE_7_SINS_STONE },
-        { "Trigger CloverBell", ACTIVATE_CLOVER_BELL },
         { "Trigger Red Pepper", ACTIVATE_RED_PEPPER },
         { "Trigger Green Pepper", ACTIVATE_GREEN_PEPPER },
         { "Trigger Rotten Pepper", ACTIVATE_ROTTEN_PEPPER },
@@ -240,7 +215,7 @@ public static class APLocations
         { "Trigger D20", ACTIVATE_DICE_20 },
 
         { "Press The Red Button", RED_BUTTON_PRESSED },
-        { "Activate The Golden Horseshoe", RED_BUTTON_GOLDEN_HORSESHOE },
+        { "Activate Golden Horseshoe", RED_BUTTON_GOLDEN_HORSESHOE },
         { "Activate Red Shiny Rock", RED_BUTTON_RED_CRYSTAL },
         { "Activate Midas Touch", RED_BUTTON_MIDAS_TOUCH },
         { "Activate Number 1", RED_BUTTON_NUMBER1 },
@@ -257,7 +232,6 @@ public static class APLocations
         { "Activate Diamond Picture", RED_BUTTON_DIAMOND_PICTURE },
         { "Activate Treasure Picture", RED_BUTTON_TREASURE_PICTURE },
         { "Activate Seven Picture", RED_BUTTON_SEVEN_PICTURE },
-        { "Activate Angel's Hand", RED_BUTTON_ANGEL },
 
         { "Take A Piss", TAKE_A_PISS },
         { "Take A Shit", TAKE_A_DUMP },
@@ -306,19 +280,9 @@ public static class APLocations
         { "Call: My head hurts!", CALL_EVIL_TAKE_OTHER_ABILITIES_DEVIOUS_MOD },
         { "Call: Give me back my money!", CALL_EVIL_DOUBLE_COINS_TICKETS_ZERO },
 
-        { "Call: There's nothing to eat but mould.", CALL_EVIL_HALVEN_CHANCES_LEMON_CHERRY },
+        { "Call: There's nothing to eat but mould. ", CALL_EVIL_HALVEN_CHANCES_LEMON_CHERRY },
         { "Call: Wait, what day is it?", CALL_EVIL_HALVEN_CHANCES_CLOVER_BELL },
         { "Call: I've already bet it all!", CALL_EVIL_HALVEN_CHANCES_DIAMOND_COINS_SEVEN },
-
-        { "Call: I'm re-organizing my mind!", CALL_HOLY_MULTIPLIER_SYMBOLS_1 },
-        { "Call: I see the patterns in my behaviour.", CALL_HOLY_MULTIPLIER_PATTERNS_1 },
-        { "Call: I'm feeling more energetic recently.", CALL_HOLY_REDUCE_CHARGES_RED_BUTTON },
-        { "Call: I need to heal myself.", CALL_HOLY_MODIFY_STORE_CHARMS_MAKE_1_FREE },
-        { "Call: I'm being constant!", CALL_HOLY_PATTERNS_REPETITION_INCREASE },
-        { "Call: Help!", CALL_HOLY_SPAWN_SACRED_CHARM },
-
-        { "Call: I want to address some stuff.", CALL_HOLY_PATTERNS_VALUE_3_LESS_ELEMENTS },
-        { "Call: I'll take back control of my life.", CALL_HOLY_PATTERNS_VALUE_4_MORE_ELEMENTS },
 
         { "Win Something", WIN_SOMETHING },
         { "Score HOR Pattern", SEND_HORIZONTAL3 },
@@ -340,14 +304,6 @@ public static class APLocations
         { "Score with Diamonds", SEND_DIAMOND },
         { "Score with Treasures", SEND_COINS },
         { "Score with Sevens", SEND_SEVEN },
-
-        { "Score a Jackpot with Lemons", SEND_LEMONS_JACKPOT },
-        { "Score a Jackpot with Cherries", SEND_CHERRY_JACKPOT },
-        { "Score a Jackpot with Clovers", SEND_CLOVER_JACKPOT },
-        { "Score a Jackpot with Bells", SEND_BELL_JACKPOT },
-        { "Score a Jackpot with Diamonds", SEND_DIAMOND_JACKPOT },
-        { "Score a Jackpot with Treasures", SEND_COINS_JACKPOT },
-        { "Score a Jackpot with Sevens", SEND_SEVEN_JACKPOT },
 
         { "Deadline 1 Complete", GetDeadlineLocation(1) },
         { "Deadline 2 Complete", GetDeadlineLocation(2) },

@@ -50,7 +50,6 @@ public static class APSaveManager
             Save();
 
             APState.APSaveLoaded = true;
-            APResyncManager.TryAutoResync();
             APState.SuppressDrawerUnlockQuestion = false;
             return;
         }
@@ -146,7 +145,6 @@ public static class APSaveManager
         EnsureStartingAbilities();
 
         APState.APSaveLoaded = true;
-        APResyncManager.TryAutoResync();
         APState.SuppressDrawerUnlockQuestion = false;
         Plugin.Log.LogInfo("[AP] AP save loaded");
     }

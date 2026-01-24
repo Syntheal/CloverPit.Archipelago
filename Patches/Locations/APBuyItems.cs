@@ -175,7 +175,6 @@ public static class APBuyItems
 
         if (id < 0 || id >= storePowerups.Count() || storePowerups[id] == null)
         {
-            Plugin.Log.LogError($"[AP] storePowerups[{id}] is null or out of bounds. Could not process purchase.");
             return;
         }
 

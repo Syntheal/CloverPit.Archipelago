@@ -95,15 +95,18 @@
     <Compile Include="APItemMapping.cs" />
     <Compile Include="APKeyProgression.cs" />
     <Compile Include="APPhoneAbilityMapping.cs" />
-    <Compile Include="APResyncManager.cs" />
     <Compile Include="APState.cs" />
     <Compile Include="APTrapExecutor.cs" />
+    <Compile Include="APUI\APCallChecklistUI.cs" />
     <Compile Include="APUI\APUITrapPopup.cs" />
     <Compile Include="APUI\APSuffixLegendUI.cs" />
     <Compile Include="Deathlink\APRestartPatch.cs" />
     <Compile Include="Deathlink\APDeathLinkKiller.cs" />
     <Compile Include="Deathlink\APDeathLinkDieTryPatch.cs" />
     <Compile Include="APConsoleLog.cs" />
+    <Compile Include="Patches\SkeletonIsUnlockedPatch.cs" />
+    <Compile Include="Patches\Drawer\APDrawerKeyAnimationStart.cs" />
+    <Compile Include="Patches\APSecretPatch.cs" />
     <Compile Include="Patches\Locations\APSlots.cs" />
     <Compile Include="Patches\LuckPatch.cs" />
     <Compile Include="Patches\Locations\APBuyItems.cs" />
@@ -112,7 +115,10 @@
     <Compile Include="Patches\Locations\RedButtonCharms.cs" />
     <Compile Include="Patches\Phone\APAbilityDefinePhoneStuffPatch.cs" />
     <Compile Include="Patches\Phone\AbilityDescriptionPatch.cs" />
+    <Compile Include="Patches\Shop_And_Powerups\StoreLuckPatch.cs" />
     <Compile Include="Patches\Shop_And_Powerups\PowerupNamePatch.cs" />
+    <Compile Include="Patches\UI\BlockNewRunWithoutAPPatch.cs" />
+    <Compile Include="Patches\UI\BlockTerminalNotificationPatch.cs" />
     <Compile Include="plugin.cs" />
     <Compile Include="PowerupUnlocker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,21 +126,18 @@
     <Compile Include="Saves\APSaveManager.cs" />
     <Compile Include="Progressive_Items\APSkeletonProgression.cs" />
     <Compile Include="Progressive_Items\APDrawerProgression.cs" />
-    <Compile Include="Patches\APAfterLoadPatch.cs" />
     <Compile Include="Patches\APGameDataInitPatch.cs" />
     <Compile Include="Patches\PreventVanillaUnlocksPatch.cs" />
     <Compile Include="Patches\UI\AlwaysDisableSeededPatch.cs" />
     <Compile Include="Patches\UI\AutoOpenAPUIOnMenuPatch.cs" />
     <Compile Include="Patches\UI\BlockControlsWhileAPUIOpenPatch.cs" />
     <Compile Include="Patches\UI\BlockMenuInputWhileAPUIOpenPatch.cs" />
-    <Compile Include="Patches\UI\BlockNewRunWithoutAPPatch.cs" />
     <Compile Include="Patches\UI\GreyOutNewRunButtonsPatch.cs" />
     <Compile Include="Patches\UI\LockVirtualCursorWhileAPUIOpenPatch.cs" />
     <Compile Include="Patches\UI\RemoveContinueButtonPatch.cs" />
     <Compile Include="Patches\Shop_And_Powerups\APLockedPowerupsResultPatch.cs" />
     <Compile Include="Patches\Shop_And_Powerups\APStoreCapsuleSafetyPatch.cs" />
     <Compile Include="Patches\Phone\AbilitySlotMissingAPPatch.cs" />
-    <Compile Include="Patches\Phone\APAbilityInitializeAllPatch.cs" />
     <Compile Include="Patches\Phone\PreventLockedAbilityCanBePickedInstancePatch.cs" />
     <Compile Include="Patches\Phone\PreventLockedAbilityCanBePickedStaticPatch.cs" />
     <Compile Include="Patches\Locations\APCharmPatch.cs" />
@@ -146,7 +149,6 @@
     <Compile Include="Patches\Keys\APRewardBoxOpenPatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerCountPatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerInitializePatch.cs" />
-    <Compile Include="Patches\Drawer\APDrawerKeyAnimationCoroutinePatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerOpenTryPatch.cs" />
     <Compile Include="Patches\Drawer\ApplyAPDrawerStatePatch.cs" />
     <Compile Include="Patches\Drawer\DrawerSkeletonFilterPatch.cs" />
@@ -161,6 +163,5 @@
     <Compile Include="APUI\APConnectUI.cs" />
     <Compile Include="APUI\APConsoleUI.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using CloverPit.Archipelago.APUI;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.0.5")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.1.0")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -27,6 +28,9 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(legend);
         legend.AddComponent<APSuffixLegendUI>();
 
+        var checklist = new GameObject("APChecklist");
+        DontDestroyOnLoad(checklist);
+        checklist.AddComponent<APCallChecklistUI>();
         Log = Logger;
         Log.LogInfo("CloverPit Archipelago loaded");
 
@@ -34,7 +38,6 @@ public class Plugin : BaseUnityPlugin
         harmony.PatchAll();
 
         APLocations.PopulateLocationNames();
-
         APClient.ItemReceived += item =>
         {
             string receiveKey = item.ReceiveKey;
@@ -79,7 +82,7 @@ public class Plugin : BaseUnityPlugin
                 else if (item.ItemName.StartsWith("Progressive Luck"))
                 {
                     APState.LuckReceived++;
-                    if (APState.LuckReceived > APState.LuckSaved)
+                    if (APState.LuckReceived > APState.LuckSaved && APState.LuckSaved < 5)
                         APState.LuckSaved++;
                 }
                 else if (item.ItemName.StartsWith("Progressive Drawer"))
@@ -93,7 +96,7 @@ public class Plugin : BaseUnityPlugin
                     APState.CoinTrapReceived++;
                     if (APState.CoinTrapReceived > APState.CoinTrapSaved)
                     {
-                        APTrapExecutor.TriggerCloverTrap(item.PlayerName);
+                        APTrapExecutor.TriggerCoinTrap(item.PlayerName);
                         APState.CoinTrapSaved++;
                     }
                 }
@@ -127,7 +130,6 @@ public class Plugin : BaseUnityPlugin
             }
         };
         APClient.Connected += GreyOutNewRunButtonsPatch.OnAPConnected;
-        APClient.Connected += BlockNewRunWithoutAPPatch.OnAPConnected;
     }
 }
 

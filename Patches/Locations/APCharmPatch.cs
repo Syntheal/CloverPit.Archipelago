@@ -237,25 +237,6 @@ public static class APCharmPatch
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("Trigger_YellowStar")]
-    public static void Postfix_Trigger_YellowStar()
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        if (GameplayData.SpinsWithoutReward_Get() < 1)
-            return;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_YELLOW_STAR))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_YELLOW_STAR);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Little Star activated");
-    }
-
-    [HarmonyPostfix]
     [HarmonyPatch("DiscA_TriggerTry")]
     public static void Postfix_DiscA_FinalizeSpin()
     {
@@ -635,28 +616,6 @@ public static class APCharmPatch
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("Trigger_Pareidolia")]
-    public static void Postfix_Trigger_Pareidolia()
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        if (SlotMachineScript.GetBiggestPatternScored() != PatternScript.Kind.eye)
-            return;
-
-        if (!SlotMachineScript.IsAllSamePattern())
-            return;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_PAREIDOLIA))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_PAREIDOLIA);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Pareidolia activated");
-    }
-
-    [HarmonyPostfix]
     [HarmonyPatch("Trigger_Hourglass")]
     public static void Postfix_Trigger_Hourglass()
     {
@@ -689,28 +648,6 @@ public static class APCharmPatch
         APSaveManager.Save();
 
         Plugin.Log.LogInfo("[AP] Seven Sins Stone activated");
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch("Trigger_CloverBell")]
-    public static void Postfix_Trigger_CloverBell()
-    {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
-            return;
-
-        if (SlotMachineScript.GetPatternsCount_BySymbol(SymbolScript.Kind.clover) <= 0)
-            return;
-
-        if (SlotMachineScript.GetPatternsCount_BySymbol(SymbolScript.Kind.bell) <= 0)
-            return;
-
-        if (APLocationManager.IsChecked(APLocations.ACTIVATE_CLOVER_BELL))
-            return;
-
-        APLocationManager.Complete(APLocations.ACTIVATE_CLOVER_BELL);
-        APSaveManager.Save();
-
-        Plugin.Log.LogInfo("[AP] Clover Bell activated");
     }
 
     [HarmonyPostfix]

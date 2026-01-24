@@ -45,5 +45,6 @@ public static class APGameDataInitPatch
         }
 
         Plugin.Log.LogInfo("[AP] AP powerup state applied on connect");
+        BlockNewRunWithoutAPPatch.connected = true;
     }
 }

@@ -3,9 +3,9 @@
 public class APSuffixLegendUI : MonoBehaviour
 {
     private const float PanelWidth = 300f;
-    private const float PanelHeight = 180f;
+    private const float PanelHeight = 220f;
     private const float Padding = 10f;
-    private const float TopOffset = 50f;
+    private const float TopOffset = 20f;
 
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
@@ -42,7 +42,7 @@ public class APSuffixLegendUI : MonoBehaviour
         BeginGUIScale();
 
         Rect panelRect = new Rect(
-            ReferenceWidth - PanelWidth - Padding,
+            ReferenceWidth/2 - PanelWidth*2 - Padding - 100,
             TopOffset,
             PanelWidth,
             PanelHeight
@@ -83,9 +83,9 @@ public class APSuffixLegendUI : MonoBehaviour
             explanationStyle
         );
         y += 45f;
-
-        DrawLegendLine(panelRect, ref y, "B", "Bought", "Not Bought");
         DrawLegendLine(panelRect, ref y, "A", "Activated", "Not Activated");
+        DrawLegendLine(panelRect, ref y, "B", "Bought", "Not Bought");
+        DrawLegendLine(panelRect, ref y, "E", "Equipped", "Not Equipped");
         DrawLegendLine(panelRect, ref y, "T", "Triggered", "Not Triggered");
 
         GUI.color = oldColor;

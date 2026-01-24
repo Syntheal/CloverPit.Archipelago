@@ -45,16 +45,6 @@ public static class APPhoneAbilityMapping
         { AbilityScript.Identifier.evilHalvenChances_LemonAndCherry, APLocations.CALL_EVIL_HALVEN_CHANCES_LEMON_CHERRY },
         { AbilityScript.Identifier.evilHalvenChances_CloverAndBell, APLocations.CALL_EVIL_HALVEN_CHANCES_CLOVER_BELL },
         { AbilityScript.Identifier.evilHalvenChances_DiamondCoinsAndSeven, APLocations.CALL_EVIL_HALVEN_CHANCES_DIAMOND_COINS_SEVEN },
-
-        { AbilityScript.Identifier.holyGeneric_MultiplierSymbols_1, APLocations.CALL_HOLY_MULTIPLIER_SYMBOLS_1 },
-        { AbilityScript.Identifier.holyGeneric_MultiplierPatterns_1, APLocations.CALL_HOLY_MULTIPLIER_PATTERNS_1 },
-        { AbilityScript.Identifier.holyGeneric_ReduceChargesNeeded_ForRedButtonCharms, APLocations.CALL_HOLY_REDUCE_CHARGES_RED_BUTTON },
-        { AbilityScript.Identifier.holyGeneric_ModifyStoreCharms_Make1Free, APLocations.CALL_HOLY_MODIFY_STORE_CHARMS_MAKE_1_FREE },
-        { AbilityScript.Identifier.holyGeneric_PatternsRepetitionIncrase, APLocations.CALL_HOLY_PATTERNS_REPETITION_INCREASE },
-        { AbilityScript.Identifier.holyGeneric_SpawnSacredCharm, APLocations.CALL_HOLY_SPAWN_SACRED_CHARM },
-
-        { AbilityScript.Identifier.holyPatternsValue_3LessElements, APLocations.CALL_HOLY_PATTERNS_VALUE_3_LESS_ELEMENTS },
-        { AbilityScript.Identifier.holyPatternsValue_4MoreElements, APLocations.CALL_HOLY_PATTERNS_VALUE_4_MORE_ELEMENTS },
     };
 
     public static bool TryGetLocation(

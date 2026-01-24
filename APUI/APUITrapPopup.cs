@@ -56,6 +56,8 @@ public class APUITrapPopup : MonoBehaviour
         {
             Open();
         }
+        if (isShowing)
+            EnableCursor();
     }
 
     private void OnGUI()

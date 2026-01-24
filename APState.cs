@@ -88,6 +88,13 @@ public static class APState
         IsGrantingItem = false;
         LocationsResynced = false;
 
+        APState.DrawersReceived = 0;
+        APState.SkeletonsReceived = 0;
+        APState.CloverTrapReceived = 0;
+        APState.CoinTrapReceived = 0;
+        APState.FillersReceived = 0;
+        APState.LuckReceived = 0;
+
         SlotName = "";
         Seed = "";
 

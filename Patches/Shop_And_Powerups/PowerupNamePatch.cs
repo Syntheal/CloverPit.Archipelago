@@ -17,6 +17,7 @@ public static class PowerupNamePatch
         if (string.IsNullOrEmpty(__result))
             return;
 
+
         string baseName = StripModifierTag(__result);
 
         string buyLoc = "Buy " + baseName;
@@ -27,10 +28,6 @@ public static class PowerupNamePatch
         if (buyLoc == "Buy Cigarettes")
         {
             buyId = APLocations.GetLocationId("Smoke Some Cigarettes");
-        }
-        else if (buyLoc == "Buy Skull")
-        {
-            buyId = APLocations.GetLocationId("Equip Skeleton Head");
         }
         else
         {
@@ -54,6 +51,31 @@ public static class PowerupNamePatch
             triggerId = APLocations.GetLocationId(triggerLoc);
         }
         long activateId = APLocations.GetLocationId(activateLoc);
+
+        long equipId = -1L;
+        if (baseName == "Corpse" || baseName == "Skull")
+        {
+            switch (__instance.identifier)
+            {
+                case (PowerupScript.Identifier.Skeleton_Head):
+                    equipId = APLocations.GetLocationId("Equip Skeleton Head");
+                break;
+                case (PowerupScript.Identifier.Skeleton_Arm1):
+                    equipId = APLocations.GetLocationId("Equip Skeleton Arm 1");
+                break;
+                case (PowerupScript.Identifier.Skeleton_Arm2):
+                    equipId = APLocations.GetLocationId("Equip Skeleton Arm 2");
+                break;
+                case (PowerupScript.Identifier.Skeleton_Leg1):
+                    equipId = APLocations.GetLocationId("Equip Skeleton Leg 1");
+                break;
+                case (PowerupScript.Identifier.Skeleton_Leg2):
+                    equipId = APLocations.GetLocationId("Equip Skeleton Leg 2");
+                break;
+            }
+            if (equipId != -1L)
+                __result += APLocationManager.IsChecked(equipId) ? " (" + "<color=green>E" + "</color>)" : " (" + "<color=red>E" + "</color>)";
+        }
 
         if (buyId != -1L)
             __result += APLocationManager.IsChecked(buyId) ? " (" + "<color=green>B" + "</color>)" : " (" + "<color=red>B" + "</color>)";

@@ -7,6 +7,7 @@ using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using Panik;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -17,6 +18,10 @@ using static APState;
 public static class APClient
 {
     public static ArchipelagoSession Session;
+
+    public static bool _canProcessQueue = false;
+    private static readonly ConcurrentQueue<ItemInfo> ItemQueue = new ConcurrentQueue<ItemInfo>();
+    public static bool _isProcessingQueue = false;
 
     public static event Action Connected;
     public static event Action<APItem> ItemReceived;
@@ -193,37 +198,60 @@ public static class APClient
         }
     }
 
-
     private static void OnItemInfoReceived(ReceivedItemsHelper helper)
     {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
+        while (helper.PeekItem() != null){
+            ItemQueue.Enqueue(helper.DequeueItem());
+        }
+      
+        TryProcessQueue();
+    }
+
+    public static void TryProcessQueue()
+    {
+        if (!_canProcessQueue || _isProcessingQueue)
             return;
 
-        int alreadyProcessed = APSaveManager.data.ProcessedItemCount;
-        int index = 0;
+        Task.Run(ProcessQueue);
+    }
 
-        while (helper.PeekItem() != null)
+    private static async Task ProcessQueue()
+    {
+        _isProcessingQueue = true;
+        try
         {
-            ItemInfo info = helper.DequeueItem();
+            await Task.Delay(500);
 
-            if (index < alreadyProcessed)
+            int alreadyProcessed = APSaveManager.data.ProcessedItemCount;
+            int index = 0;
+
+            while (ItemQueue.TryDequeue(out var info))
             {
+                if (index < alreadyProcessed)
+                {
+                    index++;
+                    continue;
+                }
+
+                var item = new APItem
+                {
+                    ItemId = info.ItemId,
+                    Player = info.Player.Slot,
+                    ItemName = info.ItemName ?? info.ItemDisplayName,
+                    PlayerName = Session.Players.GetPlayerName(info.Player.Slot)
+                };
+
+                GrantItem(item);
                 index++;
-                continue;
+
+                await Task.Yield();
             }
 
-            var item = new APItem
-            {
-                ItemId = info.ItemId,
-                Player = info.Player.Slot,
-                ItemName = info.ItemName ?? info.ItemDisplayName,
-                PlayerName = Session.Players.GetPlayerName(info.Player.Slot)
-            };
-
-            GrantItem(item);
             APSaveManager.Save();
-
-            index++;
+        }
+        finally
+        {
+            _isProcessingQueue = false;
         }
     }
 
@@ -257,21 +285,6 @@ public static class APClient
             $"Sent location check {APLocations.GetLocationName(locationId)}",
             APConsoleLineType.ItemSent
         );
-    }
-
-    public static void RequestResync()
-    {
-        if (!APState.IsConnected)
-            return;
-
-        APState.DrawersReceived = 0;
-        APState.SkeletonsReceived = 0;
-        APState.CloverTrapReceived = 0;
-        APState.CoinTrapReceived = 0;
-        APState.FillersReceived = 0;
-        APState.LuckReceived = 0;
-        Session.Socket.SendPacket(new SyncPacket());
-        Plugin.Log.LogInfo("[AP] Requested item sync");
     }
 
     public static void Disconnect()

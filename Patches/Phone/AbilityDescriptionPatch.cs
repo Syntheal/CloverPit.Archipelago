@@ -17,6 +17,13 @@ public static class AbilityDescriptionPatch
         if (__instance == null || string.IsNullOrEmpty(__result))
             return;
 
+        if (__instance.IdentifierGet() == AbilityScript.Identifier.evilHalvenChances_LemonAndCherry)
+        {
+            __result =
+                "Permanently halve base lemon <sprite name=\"S_Lemon\"> & cherry <sprite name=\"S_Cherry\"> manifest chances. " +
+                $"Then apply the <color=red>Devious</color> <rainb>trait</rainb> (<i>+0.6% to get <color=red>666</color></i>) to a random equipped charm.";
+        }
+
         string descriptionText = __result;
 
         string abilityNameForLocation = __instance.NameGetTranslated();
@@ -45,13 +52,13 @@ public static class AbilityDescriptionPatch
             if (textComp is TMP_Text tmpText)
             {
                 tmpText.enableAutoSizing = true;
-                tmpText.fontSizeMin = 12;
+                tmpText.fontSizeMin = 8;
                 tmpText.fontSizeMax = 16; 
             }
             else if (textComp is UnityEngine.UI.Text uiText)
             {
                 uiText.resizeTextForBestFit = true;
-                uiText.resizeTextMinSize = 12;
+                uiText.resizeTextMinSize = 8;
                 uiText.resizeTextMaxSize = 16;
             }
         }

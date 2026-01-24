@@ -25,7 +25,7 @@ public static class APDoorOpenPatch
 
             if (matchesRequiredEnding)
             {
-                APLocationManager.Complete(APLocations.GOAL_COMPLETE);
+                APClient.SendGoalCompletion();
                 APState.goalCompleted = true;
             }
         }
