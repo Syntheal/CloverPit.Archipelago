@@ -15,7 +15,7 @@ public class APConnectUI : MonoBehaviour
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
 
-    private readonly Rect panelRect = new Rect(10, 180, 320, 360);
+    private readonly Rect panelRect = new Rect(10, 180, 320, 420);
     private const float Padding = 10f;
 
     private Matrix4x4 oldMatrix;
@@ -159,6 +159,36 @@ public class APConnectUI : MonoBehaviour
 
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
+
+        GUILayout.Space(3);
+
+
+        if (APState.IsConnected)
+        {
+            GUILayout.Label("Goal Completion:");
+            string goalText = "";
+            if (APState.goalType == "key")
+            {
+                if (APState.RequiredKeyEnding == 1)
+                {
+                    goalText = "Achieve Good Ending";
+                } else if (APState.RequiredKeyEnding == 0)
+                {
+                    goalText = "Achieve Bad Ending";
+                }
+            }
+            else if (APState.goalType == "deadline")
+            {
+                goalText += "Deadline " + APState.deadlineGoal;
+                goalText += " reached " + APState.deadlinesCompleted + "/" + APState.deadlineAmount + " times";
+            }
+            GUILayout.Label(goalText);
+        }
+        else
+        {
+            GUILayout.Label(" ");
+            GUILayout.Label(" ");
+        }
 
         GUILayout.Space(3);
 

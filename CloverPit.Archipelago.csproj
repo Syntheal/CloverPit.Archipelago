@@ -128,7 +128,7 @@
     <Compile Include="Progressive_Items\APDrawerProgression.cs" />
     <Compile Include="Patches\APGameDataInitPatch.cs" />
     <Compile Include="Patches\PreventVanillaUnlocksPatch.cs" />
-    <Compile Include="Patches\UI\AlwaysDisableSeededPatch.cs" />
+    <Compile Include="Patches\UI\DisableSeededPatch.cs" />
     <Compile Include="Patches\UI\AutoOpenAPUIOnMenuPatch.cs" />
     <Compile Include="Patches\UI\BlockControlsWhileAPUIOpenPatch.cs" />
     <Compile Include="Patches\UI\BlockMenuInputWhileAPUIOpenPatch.cs" />

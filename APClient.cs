@@ -172,14 +172,14 @@ public static class APClient
             if (APState.goalType == "deadline")
             {
                 APState.deadlineGoal =
-                    slotData.TryGetValue("deadline_goal", out var dg) && dg is int deadlineGoal
-                    ? deadlineGoal
-                    : 16;
+                    slotData.TryGetValue("deadline_goal", out var dg) && int.TryParse(dg?.ToString(), out var parsedDeadlineGoal)
+                    ? parsedDeadlineGoal
+                    : 8;
 
                 APState.deadlineAmount =
-                    slotData.TryGetValue("deadline_amount", out var da) && da is int deadlineAmount
-                    ? deadlineAmount
-                    : 12;
+                    slotData.TryGetValue("deadline_amount", out var da) && int.TryParse(da?.ToString(), out var parsedDeadlineAmount)
+                    ? parsedDeadlineAmount
+                    : 5;
             }
 
             APState.Deathlink = slotData.TryGetValue("deathlink", out var deathlink) && Convert.ToString(deathlink) == "1";
