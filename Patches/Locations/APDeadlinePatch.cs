@@ -4,6 +4,7 @@ using Panik;
 [HarmonyPatch(typeof(GameplayData))]
 public static class APDeadlinePatch
 {
+    private static bool NewRun = true;
     [HarmonyPostfix]
     [HarmonyPatch(nameof(GameplayData.Stats_DeadlinesCompleted_Add))]
     static void Postfix()
@@ -14,11 +15,17 @@ public static class APDeadlinePatch
         int actualCompleted =
             (int)GameplayData.Stats_DeadlinesCompleted_Get();
 
-        if (APState.deadlineAmount == actualCompleted)
+        if (actualCompleted == 1)
+            NewRun = true;
+
+        if (APState.deadlineGoal == actualCompleted && NewRun)
+        {
             APState.deadlinesCompleted++;
+            NewRun = false;
+        }
 
         while (APState.DeadlinesSentToAP < actualCompleted &&
-               APState.DeadlinesSentToAP < 12)
+               APState.DeadlinesSentToAP < 10)
         {
             APState.DeadlinesSentToAP++;
 
