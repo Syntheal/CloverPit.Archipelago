@@ -55,6 +55,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UniTask, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UniTask.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\Unity.TextMeshPro.dll</HintPath>
@@ -104,6 +108,7 @@
     <Compile Include="Deathlink\APDeathLinkKiller.cs" />
     <Compile Include="Deathlink\APDeathLinkDieTryPatch.cs" />
     <Compile Include="APConsoleLog.cs" />
+    <Compile Include="Patches\PlatformDataMasterPatch.cs" />
     <Compile Include="Patches\SkeletonIsUnlockedPatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerKeyAnimationStart.cs" />
     <Compile Include="Patches\APSecretPatch.cs" />

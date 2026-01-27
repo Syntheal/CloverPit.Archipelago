@@ -195,10 +195,13 @@ public static class APBuyItems
     [HarmonyPatch("BuyTry")]
     public static void Postfix_BuyTry(int id, ref BuyResult __result)
     {
-        if (!APState.IsConnected || !APState.APSaveLoaded || __result != BuyResult.Success)
+        if (__result != BuyResult.Success || string.IsNullOrEmpty(PendingAPActivation))
+        {
+            PendingAPActivation = null;
             return;
+        }
 
-        if (string.IsNullOrEmpty(PendingAPActivation))
+        if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
         if (CharmToItemId.TryGetValue(PendingAPActivation, out var charmItemId))
@@ -215,6 +218,7 @@ public static class APBuyItems
 
         PendingAPActivation = null;
     }
+
     private static bool IsSkeletonPowerup(PowerupScript.Identifier identifier)
     {
         return identifier == PowerupScript.Identifier.Skeleton_Head ||

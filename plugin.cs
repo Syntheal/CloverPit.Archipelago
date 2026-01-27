@@ -4,7 +4,7 @@ using CloverPit.Archipelago.APUI;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.1.2")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.1.3")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
