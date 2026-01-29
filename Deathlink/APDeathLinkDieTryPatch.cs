@@ -34,7 +34,7 @@ internal static class APDeathLinkDieTryPatch
             case APDeathCause.Gameplay:
             case APDeathCause.None:
             default:
-                APClient.SendDeathLink("Died in CloverPit");
+                APClient.SendDeathLink("Did not meet the deadline goal");
                 break;
         }
         APDeathState.PendingDeathCause = APDeathCause.None;

@@ -40,18 +40,12 @@ public static class APCharmPatch
         Plugin.Log.LogInfo("[AP] Ankh activated");
     }
 
-    private static int _lastHamsaUpsideUnlock = 0;
     [HarmonyPostfix]
     [HarmonyPatch("Trigger_UpsideHamsa")]
     public static void Postfix_Trigger_UpsideHamsa()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
-
-        if (Data.game.UnlockSteps_HamsaUpside <= _lastHamsaUpsideUnlock)
-            return;
-
-        _lastHamsaUpsideUnlock = Data.game.UnlockSteps_HamsaUpside;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_HAMSA))
             return;
