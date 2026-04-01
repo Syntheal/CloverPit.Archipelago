@@ -17,6 +17,9 @@ public static class APDeathLinkKiller
         if (GameplayMaster.GetGamePhase() == GameplayMaster.GamePhase.death)
             return;
 
+        if (!APState.GameStarted)
+            return;
+
         if (HasAnkhEquipped())
         {
             typeof(PowerupScript).GetMethod("Trigger_Ankh", BindingFlags.NonPublic | BindingFlags.Static)?.Invoke(null, null);
@@ -26,6 +29,8 @@ public static class APDeathLinkKiller
             );
             return;
         }
+
+        TerminalScript.SetState(TerminalScript.State.turnedOff_nothing);
 
         APDeathState.PendingDeathCause = APDeathCause.DeathLink;
 

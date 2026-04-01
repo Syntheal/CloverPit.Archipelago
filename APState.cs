@@ -22,21 +22,29 @@ public static class APState
 
     public static DeathLinkService DeathLink;
 
+    public static bool NewMenu = true;
+
     public static bool IsConnected = false;
     public static bool IsGrantingItem = false;
     public static bool NeedsApply = false;
     public static bool IsAPUIOpen = false;
     public static bool GameStarted = false;
 
-    //Idk why I decided to change the case for these but I cannot be bothered to change it
     public static string goalType = "key";
     public static int deadlineGoal = 12;
     public static int deadlineAmount = 5;
     public static int deadlinesCompleted = 0;
+    public static int PackAmount = 0;
     public static bool goalCompleted = false;
 
     public static bool Deathlink = false;
     public static bool DeathLinkRestart = false;
+    public static bool SacredLocation = false;
+    public static bool CardLocation = false;
+
+    public static bool HardMode = false;
+
+    public static RunModifierScript.Identifier CurrentModifier = RunModifierScript.Identifier.defaultModifier;
 
     public static int DeadlinesSentToAP = 0;
 
@@ -56,6 +64,14 @@ public static class APState
     public static int CoinTrapReceived = 0;
     public static int LuckSaved = 0;
     public static int LuckReceived = 0;
+    public static int StartTicketsSaved = 0;
+    public static int StartTicektsReceived = 0;
+    public static int BonusTicketsSaved = 0;
+    public static int BonusTicketsReceived = 0;
+    public static int PacksSaved = 0;
+    public static int PacksReceived = 0;
+
+    public static int BonusDeadline = 0;
 
     public static bool SuppressDrawerUnlockQuestion = false;
 
@@ -80,6 +96,11 @@ public static class APState
     public static readonly HashSet<AbilityScript.Identifier> UnlockedPhoneAbilities
         = new HashSet<AbilityScript.Identifier>();
 
+    public static readonly HashSet<RunModifierScript.Identifier> UnlockedModifiers
+        = new HashSet<RunModifierScript.Identifier>();
+
+    public static readonly HashSet<RunModifierScript.Identifier> BeatModifiers
+        = new HashSet<RunModifierScript.Identifier>();
     public static void Reset()
     {
         IsConnected = false;
@@ -87,6 +108,7 @@ public static class APState
         NeedsApply = false;
         IsGrantingItem = false;
         LocationsResynced = false;
+        HardMode = false;
 
         APState.DrawersReceived = 0;
         APState.SkeletonsReceived = 0;
@@ -94,6 +116,9 @@ public static class APState
         APState.CoinTrapReceived = 0;
         APState.FillersReceived = 0;
         APState.LuckReceived = 0;
+        APState.BonusTicketsReceived = 0;
+        APState.StartTicektsReceived = 0;
+        APState.PacksReceived = 0;
 
         SlotName = "";
         Seed = "";
@@ -101,5 +126,6 @@ public static class APState
         UnlockedDrawers = 0;
         UnlockedPowerups.Clear();
         UnlockedPhoneAbilities.Clear();
+        BeatModifiers.Clear();
     }
 }

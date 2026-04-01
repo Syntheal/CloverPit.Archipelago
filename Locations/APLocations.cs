@@ -64,11 +64,11 @@ public static class APLocations
     public const long ACTIVATE_ACE_CLUBS = 200_052;
     public const long ACTIVATE_ACE_DIAMONDS = 200_053;
     public const long ACTIVATE_ACE_SPADES = 200_054;
-    public const long ACTIVATE_EYE_OF_GOD = 200_055;
-    public const long ACTIVATE_HOLY_SPIRIT = 200_056;
-    public const long ACTIVATE_ETERNITY = 200_057;
-    public const long ACTIVATE_ADAMS_RIBCAGE = 200_058;
-    public const long ACTIVATE_OPHANIM_WHEELS = 200_059;
+    public const long ACTIVATE_EYE_OF_GOD = 200_063;
+    public const long ACTIVATE_HOLY_SPIRIT = 200_064;
+    public const long ACTIVATE_ETERNITY = 200_065;
+    public const long ACTIVATE_ADAMS_RIBCAGE = 200_066;
+    public const long ACTIVATE_OPHANIM_WHEELS = 200_067;
     public const long ACTIVATE_DICE_4 = 200_060;
     public const long ACTIVATE_DICE_6 = 200_061;
     public const long ACTIVATE_DICE_20 = 200_062;
@@ -91,6 +91,7 @@ public static class APLocations
     public const long RED_BUTTON_DIAMOND_PICTURE = 200_515;
     public const long RED_BUTTON_TREASURE_PICTURE = 200_516;
     public const long RED_BUTTON_SEVEN_PICTURE = 200_517;
+    public const long RED_BUTTON_ANGEL_HAND = 200_518;
 
     public const long TAKE_A_PISS = 201_001;
     public const long TAKE_A_DUMP = 201_002;
@@ -143,6 +144,16 @@ public static class APLocations
     public const long CALL_EVIL_HALVEN_CHANCES_CLOVER_BELL = 200_133;
     public const long CALL_EVIL_HALVEN_CHANCES_DIAMOND_COINS_SEVEN = 200_134;
 
+    public const long CALL_HOLY_MODIFY_STORE = 200_138;
+    public const long CALL_HOLY_MULT_PATTERN = 200_136;
+    public const long CALL_HOLY_MULT_SYMB = 200_135;
+    public const long CALL_HOLY_PATTERN_REP = 200_139;
+    public const long CALL_HOLY_REDUCE = 200_137;
+    public const long CALL_HOLY_HELP = 200_140;
+
+    public const long CALL_HOLY_3LESS = 200_141;
+    public const long CALL_HOLY_4MORE = 200_142;
+
     public const long WIN_SOMETHING = 200_149;
     public const long SEND_HORIZONTAL3 = 200_150;
     public const long SEND_VERTICAL3 = 200_151;
@@ -163,6 +174,26 @@ public static class APLocations
     public const long SEND_DIAMOND = 200_165;
     public const long SEND_COINS = 200_166;
     public const long SEND_SEVEN = 200_167;
+
+    public const long CARD_DESPERATE = 200_200;
+    public const long CARD_FIXATION = 200_201;
+    public const long CARD_SCREEN_ADDICTION = 200_202;
+    public const long CARD_COLD = 200_203;
+    public const long CARD_OLD = 200_204;
+    public const long CARD_BULLIES = 200_205;
+    public const long CARD_DELUSIONS = 200_206;
+    public const long CARD_IMPORTANT = 200_207;
+    public const long CARD_RECOVERY = 200_208;
+    public const long CARD_LIFE = 200_209;
+    public const long CARD_INVESTMENT = 200_210;
+    public const long CARD_SACRIFICES = 200_211;
+    public const long CARD_GAMBLING = 200_212;
+    public const long CARD_CLASS = 200_213;
+    public const long CARD_HEARTBREAK = 200_214;
+    public const long CARD_REPRESSED = 200_215;
+    public const long CARD_FIRST = 200_216;
+    public const long CARD_EXPENSIVE = 200_217;
+    public const long CARD_OVERDOSE = 200_218;
 
     public static readonly Dictionary<string, long> LocationNamesToIds = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase)
     {
@@ -284,6 +315,16 @@ public static class APLocations
         { "Call: Wait, what day is it?", CALL_EVIL_HALVEN_CHANCES_CLOVER_BELL },
         { "Call: I've already bet it all!", CALL_EVIL_HALVEN_CHANCES_DIAMOND_COINS_SEVEN },
 
+        { "Call: I need to heal myself.", CALL_HOLY_MODIFY_STORE },
+        { "Call: I see the patterns in my behaviour.", CALL_HOLY_MULT_PATTERN },
+        { "Call: I'm re-organizing my mind!", CALL_HOLY_MULT_SYMB },
+        { "Call: I'm being constant!", CALL_HOLY_PATTERN_REP },
+        { "Call: I'm feeling more energetic recently.", CALL_HOLY_REDUCE },
+        { "Call: Help!", CALL_HOLY_HELP },
+
+        { "Call: I want to address some stuff.", CALL_HOLY_3LESS },
+        { "Call: I'll take back control of my life.", CALL_HOLY_4MORE },
+
         { "Win Something", WIN_SOMETHING },
         { "Score HOR Pattern", SEND_HORIZONTAL3 },
         { "Score VERT Pattern", SEND_VERTICAL3 },
@@ -304,6 +345,33 @@ public static class APLocations
         { "Score with Diamonds", SEND_DIAMOND },
         { "Score with Treasures", SEND_COINS },
         { "Score with Sevens", SEND_SEVEN },
+        
+        { "Trigger Eye of God", ACTIVATE_EYE_OF_GOD },
+        { "Trigger Holy Spirit", ACTIVATE_HOLY_SPIRIT },
+        { "Trigger Eternity", ACTIVATE_ETERNITY },
+        { "Trigger Adam's Ribcage", ACTIVATE_ADAMS_RIBCAGE },
+        { "Trigger Ophanim Wheels", ACTIVATE_OPHANIM_WHEELS },
+        { "Activate Angel's Hand", RED_BUTTON_ANGEL_HAND },
+
+        { "Desperate Search", CARD_DESPERATE },
+        { "Fixation", CARD_FIXATION },
+        { "Screen Addiction", CARD_SCREEN_ADDICTION },
+        { "Cold Affection", CARD_COLD },
+        { "Old Wounds", CARD_OLD },
+        { "Bullies' Favorite", CARD_BULLIES },
+        { "Delusions of Grandeur", CARD_DELUSIONS },
+        { "Important Choice", CARD_IMPORTANT },
+        { "Recovery Attempts", CARD_RECOVERY },
+        { "Life Lessons", CARD_LIFE },
+        { "A New Investment", CARD_INVESTMENT },
+        { "Sacrifices", CARD_SACRIFICES },
+        { "Let's Go Gambling", CARD_GAMBLING },
+        { "Class Dunce", CARD_CLASS },
+        { "Heartbreak", CARD_HEARTBREAK },
+        { "Repressed Emotions", CARD_REPRESSED },
+        { "First Love", CARD_FIRST },
+        { "Expensive Love", CARD_EXPENSIVE },
+        { "Overdose", CARD_OVERDOSE },
 
         { "Deadline 1 Complete", GetDeadlineLocation(1) },
         { "Deadline 2 Complete", GetDeadlineLocation(2) },
@@ -319,7 +387,7 @@ public static class APLocations
         { "Key 1 Collected", GetKeyLocation(0) },
         { "Key 2 Collected", GetKeyLocation(1) },
         { "Key 3 Collected", GetKeyLocation(2) },
-        { "Key 4 Collected", GetKeyLocation(3) },
+        { "Key 4 Collected", GetKeyLocation(3) },   
     };
 
     public static void PopulateLocationNames()

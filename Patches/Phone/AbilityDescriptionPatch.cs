@@ -17,6 +17,9 @@ public static class AbilityDescriptionPatch
         if (__instance == null || string.IsNullOrEmpty(__result))
             return;
 
+        if (!APState.SacredLocation && __instance.IdentifierGet().ToString().Contains("holy"))
+            return;
+
         if (__instance.IdentifierGet() == AbilityScript.Identifier.evilHalvenChances_LemonAndCherry)
         {
             __result =

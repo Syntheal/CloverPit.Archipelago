@@ -4,7 +4,7 @@ using CloverPit.Archipelago.APUI;
 using HarmonyLib;
 using UnityEngine;
 
-[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.1.4")]
+[BepInPlugin("cloverpit.archipelago", "CloverPit Archipelago", "1.2.0")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -20,6 +20,10 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(console);
         console.AddComponent<APConsoleUI>();
 
+        var goal = new GameObject("APGoalUI");
+        DontDestroyOnLoad(goal);
+        goal.AddComponent<APGoalUI>();
+
         var trap = new GameObject("APTrapUI");
         DontDestroyOnLoad(trap);
         trap.AddComponent<APUITrapPopup>();
@@ -31,6 +35,7 @@ public class Plugin : BaseUnityPlugin
         var checklist = new GameObject("APChecklist");
         DontDestroyOnLoad(checklist);
         checklist.AddComponent<APCallChecklistUI>();
+
         Log = Logger;
         Log.LogInfo("CloverPit Archipelago loaded");
 
@@ -42,7 +47,7 @@ public class Plugin : BaseUnityPlugin
         {
             string receiveKey = item.ReceiveKey;
             Log.LogDebug($"[AP] Received: {item.ItemName}");
-            if (APSaveManager.HasReceived(receiveKey) && !item.ItemName.StartsWith("Progressive") && !item.ItemName.EndsWith("Trap") && !item.ItemName.StartsWith("10x"))
+            if (APSaveManager.HasReceived(receiveKey) && !item.ItemName.StartsWith("Progressive") && !item.ItemName.EndsWith("Trap") && !item.ItemName.Contains(" Tickets") && !item.ItemName.Contains("Card Pack"))
             {
                 Log.LogDebug($"[AP] Skipped duplicate item: {item.ItemName} ({receiveKey})");
                 return;
@@ -109,14 +114,42 @@ public class Plugin : BaseUnityPlugin
                         APState.CloverTrapSaved++;
                     }
                 }
-                else if (item.ItemName.StartsWith("10x Clover"))
+                else if (item.ItemName.StartsWith("5x Clover"))
                 {
                     APState.FillersReceived++;
                     if (APState.FillersReceived > APState.FillersSaved)
                     {
-                        GameplayData.CloverTicketsAdd(10, addToStats: true);
-                        Log.LogInfo("[AP] Granted 10 Clover Tickets for item: " + item.ItemName);
+                        GameplayData.CloverTicketsAdd(5, addToStats: true);
+                        APConsoleLog.Log("5 Clover Tickets from " + item.PlayerName, APConsoleLineType.ItemReceived);
+                        Log.LogInfo("[AP] Granted 5 Clover Tickets for item: " + item.ItemName);
                         APState.FillersSaved++;
+                    }
+                }
+                else if (item.ItemName.StartsWith("Bonus Deadline"))
+                {
+                    APState.BonusTicketsReceived++;
+                    if (APState.BonusTicketsReceived > APState.BonusTicketsSaved)
+                    {
+                        APConsoleLog.Log("Bonus Deadline Tickets from " + item.PlayerName, APConsoleLineType.ItemReceived);
+                        APState.BonusTicketsSaved++;
+                    }
+                }
+                else if (item.ItemName.StartsWith("Bonus Starting"))
+                {
+                    APState.StartTicektsReceived++;
+                    if (APState.StartTicektsReceived > APState.StartTicketsSaved)
+                    {
+                        APConsoleLog.Log("Bonus Starting Tickets from " + item.PlayerName, APConsoleLineType.ItemReceived);
+                        APState.StartTicketsSaved++;
+                    }
+                }
+                else if (item.ItemName.Contains("Card Pack"))
+                {
+                    APState.PacksReceived++;
+                    if (APState.PacksReceived > APState.PacksSaved)
+                    {
+                        APCardUnlocker.GrantPack(item.PlayerName,item.ItemName);
+                        APState.PacksSaved++;
                     }
                 }
                 else

@@ -135,7 +135,22 @@ public static class APClient
             {
                 if (goalObj is Int64 goalTypeLongValue)
                 {
-                    APState.goalType = goalTypeLongValue == 0 ? "key" : "deadline"; 
+                    if (goalTypeLongValue == 0)
+                    {
+                        APState.goalType = "key";
+                    }
+                    else if (goalTypeLongValue == 1)
+                    {
+                        APState.goalType = "deadline";
+                    }
+                    else if (goalTypeLongValue == 2)
+                    {
+                        APState.goalType = "card";
+                    }
+                    else
+                    {
+                        APState.goalType = "not found";
+                    }
                 }
                 else
                 {
@@ -182,14 +197,100 @@ public static class APClient
                     : 5;
             }
 
-            APState.Deathlink = slotData.TryGetValue("deathlink", out var deathlink) && Convert.ToString(deathlink) == "1";
-            APState.DeathLinkRestart = slotData.TryGetValue("does_restart_deathlink", out var deathLinkRestart) && Convert.ToString(deathLinkRestart) == "1";
+            if (APState.goalType == "card")
+            {
+                APState.PackAmount =
+                    slotData.TryGetValue("memory_goal", out var da) && int.TryParse(da?.ToString(), out var parsedPackAmount)
+                    ? parsedPackAmount
+                    : 3;
+            }
+
+            if (slotData.TryGetValue("deathlink", out var dlobj))
+            {
+                if (dlobj is Int64 deathlinkTypeLong)
+                {
+                    if (deathlinkTypeLong == 0)
+                    {
+                        APState.Deathlink = false;
+                        APState.DeathLinkRestart = false;
+                    }
+                    else if (deathlinkTypeLong == 1)
+                    {
+                        APState.Deathlink = true;
+                        APState.DeathLinkRestart = false;
+                    }
+                    else if (deathlinkTypeLong == 2)
+                    {
+                        APState.Deathlink = true;
+                        APState.DeathLinkRestart = true;
+                    }
+                    else
+                    {
+                        APState.Deathlink = false;
+                        APState.DeathLinkRestart = false;
+                    }
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] deathlink is neither an int nor Int64.");
+                }
+            }
+
+            if (slotData.TryGetValue("extra_checks", out var exobj))
+            {
+                if (exobj is Int64 exTypeLong)
+                {
+                    if (exTypeLong == 0)
+                    {
+                        APState.SacredLocation = false;
+                        APState.CardLocation = false;
+                    }
+                    else if (exTypeLong == 1)
+                    {
+                        APState.SacredLocation = true;
+                        APState.CardLocation = false;
+                    }
+                    else if (exTypeLong == 2)
+                    {
+                        APState.SacredLocation = false;
+                        APState.CardLocation = true;
+                    }
+                    else if (exTypeLong == 3)
+                    {
+                        APState.SacredLocation = true;
+                        APState.CardLocation = true;
+                    }
+                    else
+                    {
+                        APState.SacredLocation = false;
+                        APState.CardLocation = false;
+                    }
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] extra locations is neither an int nor Int64.");
+                }
+            }
+
+            if (slotData.TryGetValue("hardmode", out var hmobj))
+            {
+                if (hmobj is Int64 hmLong)
+                {
+                    APState.HardMode = hmLong == 1;
+                }
+                else
+                {
+                    Plugin.Log.LogWarning("[AP] hardmode is neither an int nor Int64.");
+                }
+            }
 
             Plugin.Log.LogInfo(
                 $"[AP] SlotData loaded | Goal={APState.goalType}, Ending={APState.RequiredKeyEnding}, " +
                 $"DeadlineGoal={APState.deadlineGoal}, DeadlineAmount={APState.deadlineAmount}, " +
                 $"Clover={APState.CloverTrapPercent:P0}, Coin={APState.CoinTrapPercent:P0}, " +
-                $"Deathlink={APState.Deathlink}, Does restarts count for deathlink={APState.DeathLinkRestart}"
+                $"Deathlink={APState.Deathlink}, Does restarts count for deathlink={APState.DeathLinkRestart}, " +
+                $"Sacred Checks={APState.SacredLocation}, Card checks={APState.CardLocation}, " +
+                $"Hard mode = {APState.HardMode}"
             );
         }
         catch (Exception ex)
@@ -392,6 +493,12 @@ public static class APItems
     new HashSet<AbilityScript.Identifier>
     {
             //AbilityScript.Identifier.extraSpace
+    };
+
+    public static readonly HashSet<RunModifierScript.Identifier> StartingModifiers =
+    new HashSet<RunModifierScript.Identifier>
+    {
+        RunModifierScript.Identifier.defaultModifier
     };
 
     public static readonly AbilityScript.Identifier AP_EMPTY =

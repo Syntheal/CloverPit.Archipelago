@@ -8,8 +8,8 @@ public static class APSkeletonProgression
     {
         PowerupScript.Identifier.Skeleton_Head,
         PowerupScript.Identifier.Skeleton_Arm1,
-        PowerupScript.Identifier.Skeleton_Arm2,
         PowerupScript.Identifier.Skeleton_Leg1,
+        PowerupScript.Identifier.Skeleton_Arm2,
         PowerupScript.Identifier.Skeleton_Leg2,
     };
 

@@ -1,4 +1,5 @@
-﻿using Panik;
+﻿using HarmonyLib;
+using Panik;
 
 public static class APKeyProgression
 {
@@ -18,4 +19,13 @@ public static class APKeyProgression
                 return RewardBoxScript.RewardKind.DoorKey;
         }
     }
+
+    //[HarmonyPatch(typeof(RewardBoxScript), nameof(RewardBoxScript.GetRewardKind))]
+    //public static class BeepBoop
+    //{
+    //    static void Postfix(ref float __result)
+    //    {
+    //        Plugin.Log.LogError(__result);
+    //    }
+    //}
 }

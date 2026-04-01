@@ -969,6 +969,12 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
+        if (!APState.SacredLocation)
+            return;
+
+        if (SlotMachineScript.instance.GetPatternsOfKind(PatternScript.Kind.eye).Count == 0)
+            return;
+
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_EYE_OF_GOD))
             return;
 
@@ -983,6 +989,12 @@ public static class APCharmPatch
     public static void Postfix_HolySpirit()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
+            return;
+
+        if (!APState.SacredLocation)
+            return;
+
+        if (!SlotMachineScript.Has999())
             return;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_HOLY_SPIRIT))
@@ -1001,6 +1013,12 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
+        if (!APState.SacredLocation)
+            return;
+
+        if (!SlotMachineScript.Has999())
+            return;
+
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_ETERNITY))
             return;
 
@@ -1017,6 +1035,12 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
+        if (!APState.SacredLocation)
+            return;
+
+        if (!SlotMachineScript.Has999())
+            return;
+
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_ADAMS_RIBCAGE))
             return;
 
@@ -1031,6 +1055,12 @@ public static class APCharmPatch
     public static void Postfix_OphanimWheels()
     {
         if (!APState.IsConnected || !APState.APSaveLoaded)
+            return;
+
+        if (!APState.SacredLocation)
+            return;
+
+        if (!SlotMachineScript.Has999())
             return;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_OPHANIM_WHEELS))
@@ -1143,5 +1173,4 @@ public static class APCharmPatch
 
         Plugin.Log.LogInfo("[AP] Dice 4 triggered");
     }
-
 }

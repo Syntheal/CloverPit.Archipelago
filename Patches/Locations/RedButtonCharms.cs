@@ -279,4 +279,23 @@ internal static class RedButtonCharms
 
         Plugin.Log.LogInfo("[AP] Red Button Seven Picture activated");
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("AngelHand_RedButtonCallback_OnPress")]
+    private static void PostFix_AngelHand(PowerupScript powerup)
+    {
+        if (!APState.IsConnected || !APState.APSaveLoaded)
+            return;
+
+        if (!APState.SacredLocation)
+            return;
+
+        if (APLocationManager.IsChecked(APLocations.RED_BUTTON_ANGEL_HAND))
+            return;
+
+        APLocationManager.Complete(APLocations.RED_BUTTON_ANGEL_HAND);
+        APSaveManager.Save();
+
+        Plugin.Log.LogInfo("[AP] Red Button Angel Hand activated");
+    }
 }

@@ -10,7 +10,8 @@ namespace CloverPit.Archipelago.APUI
     public enum CallCategory
     {
         Normal,
-        Evil
+        Evil,
+        Sacred
     }
 
     public struct CallEntry
@@ -70,13 +71,25 @@ namespace CloverPit.Archipelago.APUI
             new CallEntry("Call: There's nothing to eat but mould. ", CallCategory.Evil, AbilityScript.Identifier.evilHalvenChances_LemonAndCherry),
             new CallEntry("Call: Wait, what day is it?", CallCategory.Evil, AbilityScript.Identifier.evilHalvenChances_CloverAndBell),
             new CallEntry("Call: I've already bet it all!", CallCategory.Evil, AbilityScript.Identifier.evilHalvenChances_DiamondCoinsAndSeven),
+
+            // -------- SACRED --------
+            new CallEntry("Call: I need to heal myself.", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_ModifyStoreCharms_Make1Free),
+            new CallEntry("Call: I see the patterns in my behaviour.", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_MultiplierPatterns_1),
+            new CallEntry("Call: I'm re-organizing my mind!", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_MultiplierSymbols_1),
+            new CallEntry("Call: I'm being constant!", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_PatternsRepetitionIncrase),
+            new CallEntry("Call: I'm feeling more energetic recently.", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_ReduceChargesNeeded_ForRedButtonCharms),
+            new CallEntry("Call: Help!", CallCategory.Sacred, AbilityScript.Identifier.holyGeneric_SpawnSacredCharm),
+
+            new CallEntry("Call: I want to address some stuff.", CallCategory.Sacred, AbilityScript.Identifier.holyPatternsValue_3LessElements),
+            new CallEntry("Call: I'll take back control of my life.", CallCategory.Sacred, AbilityScript.Identifier.holyPatternsValue_4MoreElements),
         };
     }
 
     public class APCallChecklistUI : MonoBehaviour
     {
         private const float PanelWidth = 420f;
-        private const float PanelHeight = 810f;
+        private const float PanelHeightNormal = 810f;
+        private const float PanelHeightSacred = 910f;
         private const float Padding = 10f;
         private const float TopOffset = 20f;
 
@@ -104,11 +117,13 @@ namespace CloverPit.Archipelago.APUI
 
             BeginGUIScale();
 
+            float panelHeight = APState.SacredLocation ? PanelHeightSacred : PanelHeightNormal;
+
             Rect panelRect = new Rect(
                 ReferenceWidth - PanelWidth - 20f,
                 TopOffset,
                 PanelWidth,
-                PanelHeight
+                panelHeight
             );
 
             DrawPanel(panelRect);
@@ -143,6 +158,11 @@ namespace CloverPit.Archipelago.APUI
 
             DrawCategory(ref y, contentX, contentWidth, CallCategory.Normal, Color.white);
             DrawCategory(ref y, contentX, contentWidth, CallCategory.Evil, Color.white);
+
+            if (APState.SacredLocation)
+            {
+                DrawCategory(ref y, contentX, contentWidth, CallCategory.Sacred, Color.white);
+            }
         }
 
         private void DrawCategory(ref float y, float x, float width, CallCategory category, Color headerColor)
@@ -155,14 +175,14 @@ namespace CloverPit.Archipelago.APUI
             };
 
             GUI.Label(new Rect(x, y, width, 26), category.ToString().ToUpper(), header);
-            y += 28f;
+            y += APState.SacredLocation ? 22f : 28f;
 
             foreach (var call in APCallTable.Calls.Where(c => c.Category == category))
             {
                 DrawCallLine(ref y, x, width, call);
             }
 
-            y += 12f;
+            y += APState.SacredLocation ? 6f : 12f;
         }
 
         private void DrawCallLine(ref float y, float x, float width, CallEntry call)
@@ -178,14 +198,14 @@ namespace CloverPit.Archipelago.APUI
 
             GUIStyle leftStyle = new GUIStyle(GUI.skin.label)
             {
-                fontSize = 13,
+                fontSize = APState.SacredLocation ? 12 : 13,
                 wordWrap = true,
                 normal = { textColor = checkedLoc ? Color.green : Color.red }
             };
 
             GUIStyle rightStyle = new GUIStyle(GUI.skin.label)
             {
-                fontSize = 13,
+                fontSize = APState.SacredLocation ? 12 : 13,
                 alignment = TextAnchor.UpperRight,
                 normal = { textColor = abilityUnlocked ? Color.green : Color.red }
             };
@@ -203,7 +223,7 @@ namespace CloverPit.Archipelago.APUI
             GUI.Label(leftRect, leftText, leftStyle);
             GUI.Label(rightRect, rightText, rightStyle);
 
-            y += rowHeight + 1f;
+            y += rowHeight + (APState.SacredLocation ? 0f : 1f);
         }
 
 

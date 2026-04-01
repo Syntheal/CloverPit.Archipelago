@@ -1,6 +1,7 @@
 ﻿using Archipelago;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.IO;
 
 public class APConnectUI : MonoBehaviour
 {
@@ -15,11 +16,25 @@ public class APConnectUI : MonoBehaviour
     private const float ReferenceWidth = 1920f;
     private const float ReferenceHeight = 1080f;
 
-    private readonly Rect panelRect = new Rect(10, 180, 320, 420);
+    private readonly Rect panelRect = new Rect(10, 180, 320, 335);
     private const float Padding = 10f;
 
     private Matrix4x4 oldMatrix;
     private float currentScale = 1f;
+
+    private float deleteHoldTime = 0f;
+    private const float deleteHoldDuration = 5f;
+
+    private static string SaveDirectory =>
+        Path.Combine(BepInEx.Paths.ConfigPath, "AP_SAVES");
+    private static string DataDirectory =>
+        Path.Combine(BepInEx.Paths.ConfigPath, "AP_LOGIN");
+    private static string LoginFile =>
+        Path.Combine(DataDirectory, "login.txt");
+    void Start()
+    {
+        LoadLoginData();
+    }
 
     private void BeginGUIScale()
     {
@@ -64,7 +79,10 @@ public class APConnectUI : MonoBehaviour
                 statusText = "Disconnected";
             }
         }
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            APCardUnlocker.GrantPack("Console","Card Pack 1");
+        }
         if (Input.GetKeyDown(KeyCode.F8))
         {
             ToggleUI();
@@ -82,6 +100,7 @@ public class APConnectUI : MonoBehaviour
         else
         {
             DisableCursor();
+            deleteHoldTime = 0f;
         }
     }
 
@@ -144,52 +163,6 @@ public class APConnectUI : MonoBehaviour
             normal = { textColor = Color.green }
         };
 
-        GUILayout.BeginHorizontal(GUILayout.Height(20));
-
-        if (APState.IsConnected)
-        {
-            GUILayout.Label(" Bonus Luck:", GUILayout.Width(78), GUILayout.Height(20));
-            GUILayout.Label(APState.LuckSaved.ToString(), valueStyle, GUILayout.Width(8), GUILayout.Height(20));
-        }
-        else
-        {
-            GUILayout.Label(" Connect To Play", GUILayout.Width(106), GUILayout.Height(20));
-            GUILayout.Label(" ", GUILayout.Width(8), GUILayout.Height(20));
-        }
-
-        GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
-
-        GUILayout.Space(3);
-
-
-        if (APState.IsConnected)
-        {
-            GUILayout.Label("Goal Completion:");
-            string goalText = "";
-            if (APState.goalType == "key")
-            {
-                if (APState.RequiredKeyEnding == 1)
-                {
-                    goalText = "Achieve Good Ending";
-                } else if (APState.RequiredKeyEnding == 0)
-                {
-                    goalText = "Achieve Bad Ending";
-                }
-            }
-            else if (APState.goalType == "deadline")
-            {
-                goalText += "Deadline " + APState.deadlineGoal;
-                goalText += " reached " + APState.deadlinesCompleted + "/" + APState.deadlineAmount + " times";
-            }
-            GUILayout.Label(goalText);
-        }
-        else
-        {
-            GUILayout.Label(" ");
-            GUILayout.Label(" ");
-        }
-
         GUILayout.Space(3);
 
         GUILayout.Label("Host");
@@ -210,16 +183,83 @@ public class APConnectUI : MonoBehaviour
         }
         GUI.enabled = true;
 
+        GUILayout.Space(6);
+
         if (APState.IsConnected)
         {
-            GUILayout.Space(6);
             if (GUILayout.Button("Disconnect"))
             {
                 APClient.Disconnect();
                 statusText = "Disconnected";
             }
         }
+        else
+        {
+            Rect buttonRect = GUILayoutUtility.GetRect(
+                 new GUIContent("Delete Saves"),
+                 GUI.skin.button
+            );
+
+            Event e = Event.current;
+
+            bool hovering = buttonRect.Contains(e.mousePosition);
+
+            if (hovering && e.type == EventType.MouseDown && e.button == 0)
+            {
+                deleteHoldTime = 0f;
+            }
+
+            if (hovering && Input.GetMouseButton(0))
+            {
+                deleteHoldTime += Time.deltaTime;
+
+                if (deleteHoldTime >= deleteHoldDuration)
+                {
+                    DeleteAllSaves();
+                    deleteHoldTime = 0f;
+                }
+            }
+            else if (!Input.GetMouseButton(0))
+            {
+                deleteHoldTime = 0f;
+            }
+
+            float t = Mathf.Clamp01(deleteHoldTime / deleteHoldDuration);
+
+            Color start = new Color(0.4f, 0f, 0f);
+            Color end = Color.red;
+
+            GUI.backgroundColor = Color.Lerp(start, end, t);
+
+            string label = $"Delete Saves ({deleteHoldTime:0.0}s / {deleteHoldDuration}s)";
+
+            GUI.Button(buttonRect, label);
+
+            GUI.backgroundColor = Color.white;
+        }
         GUI.enabled = true;
+    }
+
+    private void DeleteAllSaves()
+    {
+        try
+        {
+            if (Directory.Exists(SaveDirectory))
+            {
+                Directory.Delete(SaveDirectory, true);
+                Directory.CreateDirectory(SaveDirectory);
+            }
+
+            statusText = "Saves Deleted";
+            Debug.Log("[Archipelago] All AP saves deleted.");
+
+            APState.Reset();
+        }
+        catch (System.Exception e)
+        {
+            statusText = "Delete Failed";
+            Debug.LogError("[Archipelago] Failed to delete saves: " + e);
+        }
     }
 
     private async Task StartConnect()
@@ -236,6 +276,7 @@ public class APConnectUI : MonoBehaviour
             {
                 BlockNewRunWithoutAPPatch.connected = true;
                 statusText = "Connected";
+                SaveLoginData();
             }
             else
             {
@@ -247,7 +288,46 @@ public class APConnectUI : MonoBehaviour
             isConnecting = false;
         }
     }
+    private void SaveLoginData()
+    {
+        try
+        {
+            Directory.CreateDirectory(DataDirectory);
 
+            File.WriteAllLines(LoginFile, new[]
+            {
+            host ?? "",
+            slotName ?? "",
+            password ?? ""
+        });
+
+            Debug.Log("[Archipelago] Login data saved.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("[Archipelago] Failed to save login data: " + e);
+        }
+    }
+    private void LoadLoginData()
+    {
+        try
+        {
+            if (!File.Exists(LoginFile))
+                return;
+
+            var lines = File.ReadAllLines(LoginFile);
+
+            if (lines.Length > 0) host = lines[0];
+            if (lines.Length > 1) slotName = lines[1];
+            if (lines.Length > 2) password = lines[2];
+
+            Debug.Log("[Archipelago] Login data loaded.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("[Archipelago] Failed to load login data: " + e);
+        }
+    }
     private void DrawReadOnlyTextField(ref string value, bool readOnly)
     {
         GUI.enabled = !readOnly;
@@ -286,15 +366,6 @@ public class APConnectUI : MonoBehaviour
         return new GUIStyle(GUI.skin.label)
         {
             normal = { textColor = connected ? Color.green : Color.red }
-        };
-    }
-
-    private GUIStyle ErrorStyle()
-    {
-        return new GUIStyle(GUI.skin.label)
-        {
-            wordWrap = true,
-            normal = { textColor = Color.red }
         };
     }
 

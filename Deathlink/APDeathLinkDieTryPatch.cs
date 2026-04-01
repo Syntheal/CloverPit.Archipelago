@@ -27,14 +27,14 @@ internal static class APDeathLinkDieTryPatch
             case APDeathCause.Restart:
                 if (DeathLinkRestart)
                 {
-                    APClient.SendDeathLink("Restarted run");
+                    APClient.SendDeathLink(APState.SlotName + " Restarted their run");
                 }
                 break;
 
             case APDeathCause.Gameplay:
             case APDeathCause.None:
             default:
-                APClient.SendDeathLink("Did not meet the deadline goal");
+                APClient.SendDeathLink(APState.SlotName + " Did not meet their deadline goal");
                 break;
         }
         APDeathState.PendingDeathCause = APDeathCause.None;

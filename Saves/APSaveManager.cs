@@ -29,6 +29,7 @@ public static class APSaveManager
 
     public static void Load()
     {
+        int fillerIndex = 0;
         data = new APSaveData();
 
         if (string.IsNullOrEmpty(APState.SlotName))
@@ -47,6 +48,7 @@ public static class APSaveManager
             ApplyToState();
             EnsureFallbackCall();
             EnsureStartingPowerups();
+            EnsureStartingModifiers();
             Save();
 
             APState.APSaveLoaded = true;
@@ -66,21 +68,28 @@ public static class APSaveManager
             if (line.StartsWith("[") && line.EndsWith("]"))
             {
                 section = line;
+                if (section == "[FILLERS]")
+                    fillerIndex = 0;
                 continue;
             }
 
             switch (section)
             {
                 case "[RECEIVED]":
-                    data.ReceivedItems.Add(line);
+                        data.ReceivedItems.Add(line);
                     break;
 
                 case "[POWERUPS]":
-                    data.UnlockedPowerups.Add(line);
+                        data.UnlockedPowerups.Add(line);
                     break;
-
                 case "[PHONE_ABILITIES]":
                         data.UnlockedPhoneAbilities.Add(line);
+                    break;
+                case "[MEMORY_CARDS]":
+                        data.unlockedModifiers.Add(line);
+                    break;
+                case "[BEAT]":
+                        data.beatModifiers.Add(line);
                     break;
                 case "[DRAWERS]":
                     if (int.TryParse(line, out int d))
@@ -91,8 +100,19 @@ public static class APSaveManager
                         data.UnlockedSkeleton = s;
                     break;
                 case "[FILLERS]":
-                    if (int.TryParse(line, out int f))
-                        data.FillersSaved = f;
+                    if (!int.TryParse(line, out int val))
+                        break;
+
+                    if (fillerIndex == 0)
+                        data.FillersSaved = val;
+                    else if (fillerIndex == 1)
+                        data.StartSaved = val;
+                    else if (fillerIndex == 2)
+                        data.BonusSaved = val;
+                    else if (fillerIndex == 3)
+                        data.PacksSaved = val;
+
+                        fillerIndex++;
                     break;
                 case "[CLT]":
                     if (int.TryParse(line, out int clt))
@@ -143,6 +163,7 @@ public static class APSaveManager
         EnsureFallbackCall();
         EnsureStartingPowerups();
         EnsureStartingAbilities();
+        EnsureStartingModifiers();
 
         APState.APSaveLoaded = true;
         APState.SuppressDrawerUnlockQuestion = false;
@@ -174,6 +195,18 @@ public static class APSaveManager
         }
     }
 
+    private static void EnsureStartingModifiers()
+    {
+        foreach (var m in APItems.StartingModifiers)
+        {
+            string name = m.ToString();
+
+            if (!data.unlockedModifiers.Contains(name))
+            {
+                data.unlockedModifiers.Add(name);
+            }
+        }
+    }
 
     private static void EnsureFallbackCall()
     {
@@ -207,6 +240,16 @@ public static class APSaveManager
             sb.AppendLine(s);
 
         sb.AppendLine();
+        sb.AppendLine("[MEMORY_CARDS]");
+        foreach (string s in data.unlockedModifiers)
+            sb.AppendLine(s);
+
+        sb.AppendLine();
+        sb.AppendLine("[BEAT]");
+        foreach (string s in data.beatModifiers)
+            sb.AppendLine(s);
+
+        sb.AppendLine();
         sb.AppendLine("[DRAWERS]");
         sb.AppendLine(data.UnlockedDrawers.ToString());
 
@@ -217,6 +260,9 @@ public static class APSaveManager
         sb.AppendLine();
         sb.AppendLine("[FILLERS]");
         sb.AppendLine(data.FillersSaved.ToString());
+        sb.AppendLine(data.StartSaved.ToString());
+        sb.AppendLine(data.BonusSaved.ToString());
+        sb.AppendLine(data.PacksSaved.ToString());
 
         sb.AppendLine();
         sb.AppendLine("[CLT]");
@@ -267,8 +313,18 @@ public static class APSaveManager
 
         foreach (string s in data.UnlockedPhoneAbilities)
             if (Enum.TryParse(s, out AbilityScript.Identifier a))
-                    if (!APState.UnlockedPhoneAbilities.Contains(a))
-                        APState.UnlockedPhoneAbilities.Add(a);
+                if (!APState.UnlockedPhoneAbilities.Contains(a))
+                    APState.UnlockedPhoneAbilities.Add(a);
+
+        foreach (string s in data.unlockedModifiers)
+            if (Enum.TryParse(s, out RunModifierScript.Identifier d))
+                if (!APState.UnlockedModifiers.Contains(d))
+                    APState.UnlockedModifiers.Add(d);
+
+        foreach (string s in data.beatModifiers)
+            if (Enum.TryParse(s, out RunModifierScript.Identifier n))
+                if (!APState.BeatModifiers.Contains(n))
+                    APState.BeatModifiers.Add(n);
 
         APState.UnlockedDrawers = data.UnlockedDrawers;
         APState.UnlockedSkeleton = data.UnlockedSkeleton;
@@ -276,6 +332,9 @@ public static class APSaveManager
         APState.CoinTrapSaved = data.CoinTrapSaved;
         APState.CloverTrapSaved = data.CloverTrapSaved;
         APState.LuckSaved = data.LuckSaved;
+        APState.StartTicketsSaved = data.StartSaved;
+        APState.BonusTicketsSaved = data.BonusSaved;
+        APState.PacksSaved = data.PacksSaved;
 
         APState.deadlinesCompleted = data.deadlinesCompleted;
         APState.goalCompleted = data.GoalCompleted;
@@ -296,8 +355,15 @@ public static class APSaveManager
         foreach (var a in APState.UnlockedPhoneAbilities)
             data.UnlockedPhoneAbilities.Add(a.ToString());
 
+        foreach (var m in APState.UnlockedModifiers)
+            data.unlockedModifiers.Add(m.ToString());
+
+        foreach (var b in APState.BeatModifiers)
+            data.beatModifiers.Add(b.ToString());
+
         EnsureStartingPowerups();
         EnsureStartingAbilities();
+        EnsureStartingModifiers();
 
         data.UnlockedDrawers = APState.UnlockedDrawers;
         data.UnlockedSkeleton = APState.UnlockedSkeleton;
@@ -305,6 +371,9 @@ public static class APSaveManager
         data.CoinTrapSaved = APState.CoinTrapSaved;
         data.CloverTrapSaved = APState.CloverTrapSaved;
         data.LuckSaved = APState.LuckSaved;
+        data.StartSaved = APState.StartTicketsSaved;
+        data.BonusSaved = APState.BonusTicketsSaved;
+        data.PacksSaved = APState.PacksSaved;
 
         data.deadlinesCompleted = APState.deadlinesCompleted;
         data.GoalCompleted = APState.goalCompleted;

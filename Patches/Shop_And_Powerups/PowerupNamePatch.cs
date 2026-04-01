@@ -17,6 +17,8 @@ public static class PowerupNamePatch
         if (string.IsNullOrEmpty(__result))
             return;
 
+        if (!APState.SacredLocation && __instance.identifier.ToString().Contains("999"))
+            return;
 
         string baseName = StripModifierTag(__result);
 
@@ -86,10 +88,9 @@ public static class PowerupNamePatch
         if (activateId != -1L)
             __result += APLocationManager.IsChecked(activateId) ? " (" + "<color=green>A" + "</color>)" : " (" + "<color=red>A" + "</color>)";
     }
-
     private static string StripModifierTag(string text)
     {
-        int idx = text.LastIndexOf(" (");
+        int idx = text.IndexOf(" (");
         if (idx < 0)
             return text;
 

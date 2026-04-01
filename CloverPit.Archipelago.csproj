@@ -40,6 +40,10 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
@@ -65,6 +69,10 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\CloverPit\CloverPit_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -94,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APCardMapping.cs" />
     <Compile Include="APClient.cs" />
     <Compile Include="APDrawerStateApplier.cs" />
     <Compile Include="APItemMapping.cs" />
@@ -104,11 +113,23 @@
     <Compile Include="APUI\APCallChecklistUI.cs" />
     <Compile Include="APUI\APUITrapPopup.cs" />
     <Compile Include="APUI\APSuffixLegendUI.cs" />
+    <Compile Include="APUI\APGoalUI.cs" />
     <Compile Include="Deathlink\APRestartPatch.cs" />
     <Compile Include="Deathlink\APDeathLinkKiller.cs" />
     <Compile Include="Deathlink\APDeathLinkDieTryPatch.cs" />
     <Compile Include="APConsoleLog.cs" />
+    <Compile Include="Patches\Cards\APCardUnlocker.cs" />
+    <Compile Include="Patches\Cards\APUnlockedModifiersPatch.cs" />
+    <Compile Include="Patches\Cards\AP_UnlockedTotalNumber_Patch.cs" />
+    <Compile Include="Patches\Cards\DesiredFoilLevelPatch.cs" />
+    <Compile Include="Patches\Cards\RunModifierOwnedCountPatch.cs" />
+    <Compile Include="Patches\Cards\Selection\APModifierPickPatch.cs" />
+    <Compile Include="Patches\Cards\Selection\IsCardTime.cs" />
+    <Compile Include="Patches\Cards\Selection\SkipDifficultyMenuPatch.cs" />
+    <Compile Include="Patches\DeadlineRewardPatch.cs" />
+    <Compile Include="Patches\DeckBoxCloverTicketInitPatch.cs" />
     <Compile Include="Patches\PlatformDataMasterPatch.cs" />
+    <Compile Include="Patches\Shop_And_Powerups\RestockPatch.cs" />
     <Compile Include="Patches\SkeletonIsUnlockedPatch.cs" />
     <Compile Include="Patches\Drawer\APDrawerKeyAnimationStart.cs" />
     <Compile Include="Patches\APSecretPatch.cs" />
@@ -124,6 +145,7 @@
     <Compile Include="Patches\Shop_And_Powerups\PowerupNamePatch.cs" />
     <Compile Include="Patches\UI\BlockNewRunWithoutAPPatch.cs" />
     <Compile Include="Patches\UI\BlockTerminalNotificationPatch.cs" />
+    <Compile Include="Patches\UI\CreditsPatch.cs" />
     <Compile Include="plugin.cs" />
     <Compile Include="PowerupUnlocker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,13 +155,12 @@
     <Compile Include="Progressive_Items\APDrawerProgression.cs" />
     <Compile Include="Patches\APGameDataInitPatch.cs" />
     <Compile Include="Patches\PreventVanillaUnlocksPatch.cs" />
-    <Compile Include="Patches\UI\DisableSeededPatch.cs" />
     <Compile Include="Patches\UI\AutoOpenAPUIOnMenuPatch.cs" />
     <Compile Include="Patches\UI\BlockControlsWhileAPUIOpenPatch.cs" />
     <Compile Include="Patches\UI\BlockMenuInputWhileAPUIOpenPatch.cs" />
     <Compile Include="Patches\UI\GreyOutNewRunButtonsPatch.cs" />
     <Compile Include="Patches\UI\LockVirtualCursorWhileAPUIOpenPatch.cs" />
-    <Compile Include="Patches\UI\RemoveContinueButtonPatch.cs" />
+    <Compile Include="Patches\UI\BlockContinueAndSeededPatch.cs" />
     <Compile Include="Patches\Shop_And_Powerups\APLockedPowerupsResultPatch.cs" />
     <Compile Include="Patches\Shop_And_Powerups\APStoreCapsuleSafetyPatch.cs" />
     <Compile Include="Patches\Phone\AbilitySlotMissingAPPatch.cs" />
@@ -159,7 +180,6 @@
     <Compile Include="Patches\Drawer\DrawerSkeletonFilterPatch.cs" />
     <Compile Include="Patches\Cards\APCardTextOverridePatch.cs" />
     <Compile Include="Patches\Cards\APCranePackPatch.cs" />
-    <Compile Include="Patches\Cards\APDisableCardPickingPatch.cs" />
     <Compile Include="Patches\Cards\APDisableMemoryPackDealPatch.cs" />
     <Compile Include="Patches\Cards\APHideCardProgressTextPatch.cs" />
     <Compile Include="Patches\Cards\APNoDealsEverPatch.cs" />

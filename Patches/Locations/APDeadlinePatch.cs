@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Panik;
+using UnityEngine;
 
 [HarmonyPatch(typeof(GameplayData))]
 public static class APDeadlinePatch
@@ -14,6 +15,8 @@ public static class APDeadlinePatch
 
         int actualCompleted =
             (int)GameplayData.Stats_DeadlinesCompleted_Get();
+
+        APState.BonusDeadline = APState.BonusTicketsSaved;
 
         if (actualCompleted == 1)
             NewRun = true;
