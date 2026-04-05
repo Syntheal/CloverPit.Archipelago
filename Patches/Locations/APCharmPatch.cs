@@ -459,7 +459,7 @@ public static class APCharmPatch
         if (!APState.IsConnected || !APState.APSaveLoaded)
             return;
 
-        if (SlotMachineScript.GetPatternsCount() < 5)
+        if (SlotMachineScript.GetPatternsCount() < 15)
             return;
 
         if (APLocationManager.IsChecked(APLocations.ACTIVATE_GIANT_SHROOM))

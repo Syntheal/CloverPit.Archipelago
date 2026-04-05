@@ -18,7 +18,7 @@ public static class APDoorOpenPatch
 
         bool isGoodEnding = GameplayData.NineNineNine_IsTime();
 
-        if (APState.CardLocation)
+        if (APState.CardLocation || APState.goalType == "card")
         {
             RunModifierScript.Identifier id = APState.CurrentModifier;
 
