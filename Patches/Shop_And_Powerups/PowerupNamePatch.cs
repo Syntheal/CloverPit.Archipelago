@@ -1,99 +1,143 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
+using System.Text;
 
 [HarmonyPatch]
 public static class PowerupNamePatch
 {
+    private class CacheEntry
+    {
+        public string BaseName;
+        public long BuyId;
+        public long TriggerId;
+        public long ActivateId;
+        public long EquipId;
+    }
+
+    private static readonly Dictionary<PowerupScript.Identifier, CacheEntry> cache = new Dictionary<PowerupScript.Identifier, CacheEntry>();
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PowerupScript), nameof(PowerupScript.NameGet))]
     public static void Postfix_Powerup_NameGet(
         PowerupScript __instance,
         bool includeModTag,
+        bool includeFusionIcon,
         bool sanitize,
         ref string __result)
     {
-        if (!APState.IsConnected || !APState.APSaveLoaded)
+        if (!APState.IsConnected || !APState.APSaveLoaded || string.IsNullOrEmpty(__result))
             return;
 
-        if (string.IsNullOrEmpty(__result))
+        if (!APState.SacredLocation && ((int)__instance.identifier).ToString().Contains("999"))
             return;
 
-        if (!APState.SacredLocation && __instance.identifier.ToString().Contains("999"))
-            return;
+        if (!cache.TryGetValue(__instance.identifier, out var entry))
+        {
+            entry = BuildCacheEntry(__instance, __result);
+            cache[__instance.identifier] = entry;
+        }
 
-        string baseName = StripModifierTag(__result);
+        var sb = new StringBuilder(__result);
+
+        if (entry.EquipId != -1L)
+        {
+            sb.Append(APLocationManager.IsChecked(entry.EquipId)
+                ? " (<color=green>E</color>)"
+                : " (<color=red>E</color>)");
+        }
+
+        if (entry.BuyId != -1L)
+        {
+            sb.Append(APLocationManager.IsChecked(entry.BuyId)
+                ? " (<color=green>B</color>)"
+                : " (<color=red>B</color>)");
+        }
+
+        if (entry.TriggerId != -1L)
+        {
+            sb.Append(APLocationManager.IsChecked(entry.TriggerId)
+                ? " (<color=green>T</color>)"
+                : " (<color=red>T</color>)");
+        }
+
+        if (entry.ActivateId != -1L)
+        {
+            sb.Append(APLocationManager.IsChecked(entry.ActivateId)
+                ? " (<color=green>A</color>)"
+                : " (<color=red>A</color>)");
+        }
+
+        __result = sb.ToString();
+    }
+
+    private static CacheEntry BuildCacheEntry(PowerupScript instance, string result)
+    {
+        string baseName = StripModifierTag(result);
 
         string buyLoc = "Buy " + baseName;
         string triggerLoc = "Trigger " + baseName;
         string activateLoc = "Activate " + baseName;
 
-        long buyId = -1L;
-        if (buyLoc == "Buy Cigarettes")
+        long buyId = buyLoc == "Buy Cigarettes"
+            ? APLocations.GetLocationId("Smoke Some Cigarettes")
+            : APLocations.GetLocationId(buyLoc);
+
+        long triggerId;
+        switch (triggerLoc)
         {
-            buyId = APLocations.GetLocationId("Smoke Some Cigarettes");
+            case "Trigger Abyssu":
+                triggerId = APLocations.GetLocationId("Throw Away Abyssu");
+                break;
+            case "Trigger Vorago":
+                triggerId = APLocations.GetLocationId("Throw Away Vorago");
+                break;
+            case "Trigger Barathrum":
+                triggerId = APLocations.GetLocationId("Throw Away Barathrum");
+                break;
+            default:
+                triggerId = APLocations.GetLocationId(triggerLoc);
+                break;
         }
-        else
-        {
-            buyId = APLocations.GetLocationId(buyLoc);
-        }
-        long triggerId = -1L;
-        if (triggerLoc == "Trigger Abyssu")
-        {
-            triggerId = APLocations.GetLocationId("Throw Away Abyssu");
-        }
-        else if (triggerLoc == "Trigger Vorago")
-        {
-            triggerId = APLocations.GetLocationId("Throw Away Vorago");
-        }
-        else if (triggerLoc == "Trigger Barathrum")
-        {
-            triggerId = APLocations.GetLocationId("Throw Away Barathrum");
-        }
-        else
-        {
-            triggerId = APLocations.GetLocationId(triggerLoc);
-        }
+
         long activateId = APLocations.GetLocationId(activateLoc);
 
         long equipId = -1L;
+
         if (baseName == "Corpse" || baseName == "Skull")
         {
-            switch (__instance.identifier)
+            switch (instance.identifier)
             {
-                case (PowerupScript.Identifier.Skeleton_Head):
+                case PowerupScript.Identifier.Skeleton_Head:
                     equipId = APLocations.GetLocationId("Equip Skeleton Head");
-                break;
-                case (PowerupScript.Identifier.Skeleton_Arm1):
+                    break;
+                case PowerupScript.Identifier.Skeleton_Arm1:
                     equipId = APLocations.GetLocationId("Equip Skeleton Arm 1");
-                break;
-                case (PowerupScript.Identifier.Skeleton_Arm2):
+                    break;
+                case PowerupScript.Identifier.Skeleton_Arm2:
                     equipId = APLocations.GetLocationId("Equip Skeleton Arm 2");
-                break;
-                case (PowerupScript.Identifier.Skeleton_Leg1):
+                    break;
+                case PowerupScript.Identifier.Skeleton_Leg1:
                     equipId = APLocations.GetLocationId("Equip Skeleton Leg 1");
-                break;
-                case (PowerupScript.Identifier.Skeleton_Leg2):
+                    break;
+                case PowerupScript.Identifier.Skeleton_Leg2:
                     equipId = APLocations.GetLocationId("Equip Skeleton Leg 2");
-                break;
+                    break;
             }
-            if (equipId != -1L)
-                __result += APLocationManager.IsChecked(equipId) ? " (" + "<color=green>E" + "</color>)" : " (" + "<color=red>E" + "</color>)";
         }
 
-        if (buyId != -1L)
-            __result += APLocationManager.IsChecked(buyId) ? " (" + "<color=green>B" + "</color>)" : " (" + "<color=red>B" + "</color>)";
-
-        if (triggerId != -1L)
-            __result += APLocationManager.IsChecked(triggerId) ? " (" + "<color=green>T" + "</color>)" : " (" + "<color=red>T" + "</color>)";
-
-        if (activateId != -1L)
-            __result += APLocationManager.IsChecked(activateId) ? " (" + "<color=green>A" + "</color>)" : " (" + "<color=red>A" + "</color>)";
+        return new CacheEntry
+        {
+            BaseName = baseName,
+            BuyId = buyId,
+            TriggerId = triggerId,
+            ActivateId = activateId,
+            EquipId = equipId
+        };
     }
+
     private static string StripModifierTag(string text)
     {
         int idx = text.IndexOf(" (");
-        if (idx < 0)
-            return text;
-
-        return text.Substring(0, idx);
+        return idx < 0 ? text : text.Substring(0, idx);
     }
 }

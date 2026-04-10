@@ -99,7 +99,7 @@ namespace CloverPit.Archipelago.Patches
 
         private static bool HasUncheckedLocation(PowerupScript p)
         {
-            string baseName = StripModifierTag(p.NameGet(false, true));
+            string baseName = StripModifierTag(p.NameGet(false, false, true));
 
             long buyId;
             if (baseName == "Cigarettes")
